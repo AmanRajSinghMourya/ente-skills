@@ -9,11 +9,11 @@ Aman's personal skills for Ente work. Claude Code and Codex both read them
 | --- | --- |
 | `/todo` | Add a task to this Mac's `TODO.md`. |
 | `/pickup-task` | Start or resume a task: understand it, plan, wait for your go, build in a worktree. |
-| `/openpr` | Final checks, changes entry, cross-model review, one approval, then commit and open the PR. |
+| `/openpr` | Final checks, changes entry, cross-model review, one approval, then commit and open the PR on the fork. `/openpr upstream` opens it on ente/ente after the Codex bot's 👍. |
 | `/pr-feedback` | Work through review comments, bot findings and CI failures on your PR. |
 | `/support` | Draft an answer to a support ticket. Never sends. |
 | `/review-pr` | Review someone else's PR, including Auth icon PRs. Posts only after your OK. |
-| `/cleanup` | Remove a finished task's worktree and local branch; `/cleanup disk` frees simulator and build space. |
+| `/cleanup` | After ente/ente merges: close the fork PR, delete the worktree and local branch. `/cleanup merged` does all of them; `/cleanup disk` frees simulator and build space. |
 | `/learn` | Turn something you keep repeating into a check, a skill line or a memory note. |
 | `/today` | What needs you: open PRs, red CI, comments, tasks in progress, worktrees to clean up. |
 

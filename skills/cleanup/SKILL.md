@@ -1,18 +1,23 @@
 ---
 name: cleanup
-description: Dispose of one finished Ente task. Close its leftover fork PR once the upstream PR is merged or closed, then delete its worktree (including uncommitted files) and local branch. With "disk", free space from simulators and build caches. Use only when Aman types /cleanup or names a task to clean up.
+description: Dispose of a finished Ente task. Close its leftover fork PR once the ente/ente PR is merged or closed, then delete its worktree (including uncommitted files) and local branch. "merged" does this for every fork PR whose ente/ente PR merged; "disk" frees simulator and build space. Use only when Aman types /cleanup or names a task to clean up.
 disable-model-invocation: true
 ---
 
 # Cleanup
 
-## One task: `/cleanup <task>`
+Aman's flow: PR on the fork `AmanRajSinghMourya/ente` first; after the Codex
+bot's 👍, the same branch on `ente/ente`. When the `ente/ente` PR merges, the
+fork PR is closed here.
 
-1. **Name the exact target:** the worktree path, its branch and its TODO line.
-   Only that task. Never the main checkout, another task's worktree or any
-   remote branch.
-2. **Find both PRs for the branch.** Upstream PRs push the same `aman/…` branch
-   to `ente/ente`, and the fork PR uses it on `AmanRajSinghMourya/ente`.
+## One task: `/cleanup <task, branch or fork PR>`
+
+1. **Name the exact target:** the branch, and its worktree path and TODO line if
+   they exist on this Mac. Only that task. Never the main checkout, another
+   task's worktree or any remote branch. If there's no local worktree or
+   branch, only the PR steps apply.
+2. **Find both PRs for the branch.** The upstream PR pushes the same `aman/…`
+   branch to `ente/ente`, and the fork PR uses it on `AmanRajSinghMourya/ente`.
    (`ente-io/ente` redirects to `ente/ente`; use `ente/ente`.)
    ```sh
    gh pr list --repo ente/ente --head <branch> --state all --json number,state,url,headRefOid
@@ -38,6 +43,12 @@ disable-model-invocation: true
    discarded (`git -C <worktree> status --short` before removing).
 7. Tick the TODO line, move it to **Done**, and tell Aman what was removed, which
    PR was closed, and which files were discarded.
+
+## Everything merged: `/cleanup merged`
+
+List every open fork PR whose `ente/ente` PR is merged, with the local worktree
+and branch for each if they exist on this Mac. Ask once, then run steps 4 to 7
+for each.
 
 ## Disk: `/cleanup disk`
 

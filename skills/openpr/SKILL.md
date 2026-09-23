@@ -1,10 +1,15 @@
 ---
 name: openpr
-description: Commit an Ente task and open its PR after one approval from Aman. Runs the final checks, adds the changes entry, gets a cross-model review, then commits, pushes and runs gh pr create. Use only when Aman types /openpr or asks to open the PR.
+description: Commit an Ente task and open its PR on Aman's fork after one approval. Runs the final checks, adds the changes entry, gets a cross-model review, then commits, pushes and runs gh pr create. With "upstream", open the same PR on ente/ente once the fork PR has the Codex bot's thumbs-up. Use only when Aman types /openpr or asks to open the PR.
 disable-model-invocation: true
 ---
 
 # Open the PR
+
+Aman's flow has two steps. `/openpr` opens the PR on his fork
+`AmanRajSinghMourya/ente`. Once the Codex review bot gives that PR a 👍,
+`/openpr upstream` opens the same PR on `ente/ente`. After the `ente/ente` PR
+merges, `/cleanup` closes the fork PR.
 
 The Git and PR rules are in `~/.codex/AGENTS.md`, in the sections "Ente Push and
 PR Publishing", "Ente-only rules" and "GitHub PR Conventions". Read them now.
@@ -45,3 +50,21 @@ stop and tell Aman.
    Add the PR link to the task's TODO line and give Aman the link.
 7. For a mobile change, ask whether to start the simulator so he can check it
    himself.
+
+## `/openpr upstream`
+
+1. **Find the fork PR** for this branch: `gh pr list --repo
+   AmanRajSinghMourya/ente --head <branch> --json number,url,title,body,headRefOid`.
+2. **Check the 👍.** It's a `+1` reaction from `chatgpt-codex-connector[bot]`:
+   `gh api repos/AmanRajSinghMourya/ente/issues/<n>/reactions`. It must be newer
+   than the PR's last commit (`gh pr view <n> --repo AmanRajSinghMourya/ente
+   --json commits --jq '.commits[-1].committedDate'`). If it's missing or older,
+   stop and tell Aman. Open review comments go through `/pr-feedback` first.
+3. The local branch head must equal the fork PR's `headRefOid`. Otherwise stop.
+4. **Ask once:** target `ente/ente`, base `main`, the push remote for
+   `ente/ente` (check the push URL per AGENTS.md; `ente-io/ente` redirects to
+   it), the branch, and the same title and body as the fork PR.
+5. After yes, push the branch to that remote. Then run `gh pr create --repo
+   ente/ente --head <branch> --base main` with the same title and body (ready,
+   not draft), and confirm with `gh pr view`. Add the upstream link to the TODO
+   line. Leave the fork PR open; `/cleanup` closes it once `ente/ente` merges.
