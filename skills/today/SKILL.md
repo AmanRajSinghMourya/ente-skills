@@ -7,7 +7,9 @@ description: Show what needs Aman's attention in Ente right now. Covers his open
 
 Read-only. Change nothing.
 
-1. **PRs.** For `ente-io/ente` and `AmanRajSinghMourya/ente`:
+1. **PRs.** For `ente/ente` and `AmanRajSinghMourya/ente`. Use `ente/ente`,
+   not the `ente-io/ente` redirect, because `--author @me` returns nothing
+   through the redirect:
    `gh pr list --author @me --repo <repo> --json
    number,title,url,reviewDecision,statusCheckRollup`. For each PR, get the CI
    state (pass, fail or pending), the review decision, and the unresolved thread

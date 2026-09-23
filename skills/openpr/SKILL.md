@@ -32,7 +32,8 @@ stop and tell Aman.
    - commit groups with messages, tests beside the code they cover
    - the PR title (prefix from the touched paths, per AGENTS.md), head
      repo/branch, base, target repo (the fork `AmanRajSinghMourya/ente` unless
-     Aman picks `ente-io/ente`), gh account, and body (none unless needed)
+     Aman picks upstream `ente/ente`, which AGENTS.md calls `ente-io/ente`),
+     gh account, and body (none unless needed)
    - the changes-entry wording
 
    Wait for yes. If the content changes afterwards, ask again.
