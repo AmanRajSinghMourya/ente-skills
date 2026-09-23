@@ -1,11 +1,27 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail
 shopt -s nullglob
 
+usage() { echo "usage: install.sh [--switch]" >&2; exit 2; }
+
 root="$(cd "$(dirname "$0")" && pwd)"
+switch=0
+case "${1:-}" in
+  "") ;;
+  --switch) switch=1 ;;
+  *) usage ;;
+esac
 
 for target in "$HOME/.claude/skills" "$HOME/.codex/skills"; do
   mkdir -p "$target"
+  if [[ $switch -eq 1 ]]; then
+    for link in "$target"/*; do
+      if [[ -L "$link" && "$(readlink "$link")" == */ente-workflow/skills/* ]]; then
+        echo "removed old link $link -> $(readlink "$link")"
+        rm "$link"
+      fi
+    done
+  fi
   for skill in "$root"/skills/*/; do
     src="${skill%/}"
     link="$target/$(basename "$src")"
@@ -20,3 +36,35 @@ for target in "$HOME/.claude/skills" "$HOME/.codex/skills"; do
     echo "linked $link"
   done
 done
+
+mkdir -p "$root/todo"
+if [[ ! -f "$root/todo/TODO.md" ]]; then
+  printf '## Up next\n\n## In progress\n\n## Later\n\n## Done\n' > "$root/todo/TODO.md"
+  echo "created $root/todo/TODO.md"
+fi
+
+if command -v claude >/dev/null; then
+  claude plugin marketplace list 2>/dev/null | grep -q 'dart-flutter' \
+    || claude plugin marketplace add flutter/skills \
+    || echo "FAILED: claude marketplace flutter/skills"
+  for plugin in dart-flutter@dart-flutter figma@claude-plugins-official; do
+    claude plugin list 2>/dev/null | grep -q "$plugin" \
+      || claude plugin install --scope user "$plugin" \
+      || echo "FAILED: claude plugin $plugin"
+  done
+else
+  echo "claude not found: skipped Claude plugins"
+fi
+
+if command -v codex >/dev/null; then
+  codex plugin marketplace list 2>/dev/null | grep -q '^dart-flutter ' \
+    || codex plugin marketplace add flutter/skills \
+    || echo "FAILED: codex marketplace flutter/skills"
+  for plugin in dart-flutter@dart-flutter figma@openai-curated-remote; do
+    codex plugin list 2>/dev/null | grep -qE "^$plugin +installed" \
+      || codex plugin add "$plugin" \
+      || echo "FAILED: codex plugin $plugin"
+  done
+else
+  echo "codex not found: skipped Codex plugins"
+fi

@@ -19,7 +19,9 @@ disable-model-invocation: true
    never reached the PR: `git -C <worktree> log --oneline <headRefOid>..<branch>`
    (with no PR, `git -C <worktree> log --oneline <branch> --not --remotes`). If
    anything prints, show it and ask. It's gone for good once removed.
-4. **Remove,** from the main checkout: `git worktree remove <path>`,
+4. **Remove,** from the main checkout. If this chat is inside the worktree, leave
+   it first (in Claude Code, `ExitWorktree` with `keep`). Then
+   `git worktree remove <path>`,
    `git branch -D <branch>`, `git worktree prune`. If `remove` refuses only
    because of ignored build output (`build/`, `.dart_tool/`) and step 3 was
    clean, use `git worktree remove --force <path>`.

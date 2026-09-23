@@ -13,7 +13,7 @@ Read-only. Change nothing.
    state (pass, fail or pending), the review decision, and the unresolved thread
    count using the `reviewThreads` query from the `pr-feedback` skill.
 2. **TODO.** Lines under **In progress**, and how many are under **Up next**.
-   `TODO.md` is at the root of this skills repository.
+   The list is `todo/TODO.md` in this skills repository.
 3. **Worktrees.** `git worktree list` in the main Ente checkout. For each
    `aman/*` branch, look up its PR state. Merged or closed means it's ready for
    `/cleanup`.

@@ -7,8 +7,8 @@ description: Start or resume an Ente task from the local TODO list. Understand i
 
 ## 1. Choose it
 
-Read `TODO.md` at the root of this skills repository (this skill's real
-directory, up two levels). Take the task Aman named, otherwise the first line
+Read `todo/TODO.md` in this skills repository (this skill's real directory, up
+two levels, then `todo/`). Take the task Aman named, otherwise the first line
 under **Up next**, and move it to **In progress**. A task already in
 **In progress** is a resume: see [Resume](#resume).
 
@@ -40,21 +40,28 @@ need no approval. A worktree and code changes do.
 
 After the go:
 
-1. `git fetch origin`. From the main Ente checkout, create the worktree under
-   `.worktrees/` from `origin/main`: `B-<surface>-<desc>` for a bug, `F-` for a
-   feature, `I-` for an improvement, on branch `aman/<surface>-<desc>`. Surface
-   is photos, auth, locker, server, web or infra. Add the worktree name to the
-   TODO line.
-2. Bug: write the focused test first and run it. It must fail because of this
+1. `git fetch origin`. From the main Ente checkout, create the worktree inside
+   it, under `.worktrees/`, from `origin/main`: `B-<surface>-<desc>` for a bug,
+   `F-` for a feature, `I-` for an improvement, on branch
+   `aman/<surface>-<desc>`. Surface is photos, auth, locker, server, web or
+   infra. Make sure the main checkout's `.git/info/exclude` has the line
+   `/.worktrees/`. Add the worktree name to the TODO line.
+2. **Move this chat into the worktree** so the app's diff view shows the work.
+   The diff view follows the chat's folder, and the main checkout's git can't
+   see a worktree's changes. In Claude Code, call `EnterWorktree` with the
+   worktree `path`. In Codex, continue in a thread opened on the worktree
+   folder; if you can't switch, tell Aman before editing. Never edit a worktree
+   from a chat that's still in the main checkout.
+3. Bug: write the focused test first and run it. It must fail because of this
    bug; a missing import or a broken fixture is not a reproduction. Fix, then
    rerun the same test. If no reliable automated reproduction exists, say what
    you'll use instead before fixing.
-3. Feature: derive tests from the agreed behavior where feasible.
-4. UI or runtime behavior: use `verify` before and after, unless Aman said he'll
+4. Feature: derive tests from the agreed behavior where feasible.
+5. UI or runtime behavior: use `verify` before and after, unless Aman said he'll
    test it himself.
-5. Once the code shape settles, run the checks the matching
+6. Once the code shape settles, run the checks the matching
    `.github/workflows/*` job runs.
-6. Report in chat: what changed, what the checks and verification showed, what's
+7. Report in chat: what changed, what the checks and verification showed, what's
    untested. Suggest `/openpr`.
 
 ## Rules
@@ -80,7 +87,8 @@ Apply these when they fit the task:
 
 ## Resume
 
-Read the task's TODO line for its worktree and PR. Then run
+Read the task's TODO line for its worktree and PR, and move this chat into that
+worktree first (build step 2). Then run
 `git -C <worktree> status`, `git -C <worktree> log origin/main..HEAD`, look at
 the diff, and `gh pr view` if a PR exists. Tell Aman where it stands and what's
 next. Don't redo finished work. Ask only for decisions you can't find in the

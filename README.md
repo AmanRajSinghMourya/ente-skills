@@ -33,20 +33,30 @@ from the old setup.
 
 ## TODO list
 
-`TODO.md` sits at the root of this folder, stays on this Mac and is not in Git.
-Obsidian can open it. Sections: Up next, In progress, Later, Done.
+`todo/TODO.md` stays on this Mac and is not in Git. In Obsidian, open the
+`todo/` folder as the vault so it shows only the list. Sections: Up next,
+In progress, Later, Done.
+
+## Worktrees
+
+Task worktrees live inside the Ente checkout, under `.worktrees/`. The chat
+moves into the worktree before editing, so the Claude or Codex diff view shows
+the task's changes.
 
 ## Install on a Mac
 
 ```sh
-./install.sh
+./install.sh            # add these skills next to whatever is installed
+./install.sh --switch   # also remove the old ente-workflow skill links
 ```
 
-It links every skill into `~/.claude/skills` and `~/.codex/skills`, and skips
-names that already exist there. To switch off the old workflow, remove its links
-(they are links, so this deletes nothing):
+It does three things:
 
-```sh
-rm ~/.claude/skills/{ente-task-workflow,ente-task-queue,ente-mobile-ui-pr-workflow}
-rm ~/.codex/skills/{ente-task-workflow,ente-task-queue,ente-mobile-ui-pr-workflow}
-```
+1. Links every skill here into `~/.claude/skills` and `~/.codex/skills`. It
+   skips names that already exist. `--switch` first removes links that point
+   into the old `ente-workflow/skills` folder. They're links, so no files are
+   deleted.
+2. Creates `todo/TODO.md` if it's missing.
+3. Installs the official plugins into each app: `dart-flutter` (Flutter and Dart
+   skills plus the Dart MCP server, from `flutter/skills`) and `figma`. Each app
+   keeps its own copy and updates it, so they aren't stored here.

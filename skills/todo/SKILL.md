@@ -5,9 +5,9 @@ description: Add a task to Aman's local Ente TODO list. Use for /todo, "add this
 
 # Add to TODO
 
-The list is `TODO.md` at the root of this skills repository: resolve this
-skill's real directory (it is usually reached through a link) and go up two
-levels. It stays on this Mac. If it doesn't exist, create it with:
+The list is `todo/TODO.md` in this skills repository: resolve this skill's
+real directory (it is usually reached through a link), go up two levels, then
+into `todo/`. It stays on this Mac. If it doesn't exist, create it with:
 
 ```markdown
 ## Up next
