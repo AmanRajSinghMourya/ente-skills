@@ -55,7 +55,8 @@ Report first. Delete only what Aman picks.
 
 - `df -h /` before and after.
 - Simulators: `xcrun simctl list devices unavailable`, then
-  `xcrun simctl delete unavailable`. Old runtimes: `xcrun simctl runtime list`.
+  `xcrun simctl delete unavailable`. Leftover `Ente Test <task>` copies from `/verify`
+  can go too. Never delete `Ente Test` itself. Old runtimes: `xcrun simctl runtime list`.
 - Xcode: `~/Library/Developer/Xcode/DerivedData` and
   `~/Library/Developer/Xcode/iOS DeviceSupport`.
 - `build/` and `.dart_tool/` inside worktrees whose PR is merged or closed.

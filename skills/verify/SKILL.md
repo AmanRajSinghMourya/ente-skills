@@ -23,16 +23,26 @@ at a time; if another chat is using it, wait or ask.
    outside the workspace.
 3. **Drive** it with the simulator control tool, Maestro or computer use. Prefer
    accessibility labels to coordinates.
-4. **Login** with the test account in
-   `~/.config/ente-skills/mobile-test-account.json` (`email`, `password`), or
-   the older `~/.config/ente-workflow/mobile-test-account.json` if that's where
-   it still is on this Mac.
-   Aman allows it for verification. Never print or copy the password anywhere.
-   If the file is missing, ask him.
+4. **No logging in.** Never type a password or one-time code. Aman keeps a
+   simulator named `Ente Test` that's already logged in to the test account in
+   Photos and Locker, with no Ente app lock. Work on a copy of it, never on
+   `Ente Test` itself:
+   ```sh
+   xcrun simctl shutdown "Ente Test" 2>/dev/null
+   xcrun simctl clone "Ente Test" "Ente Test <task>"
+   xcrun simctl boot "Ente Test <task>"
+   ```
+   Run both builds on the copy. The apps keep their IDs (`io.ente.frame`,
+   `io.ente.locker`), so installing over them keeps the login. Delete the copy
+   when you're done: `xcrun simctl delete "Ente Test <task>"`. If `Ente Test` is
+   missing or logged out, tell Aman once (setup is in the README) and carry on
+   with anything that doesn't need a logged-in app. On Android, do the same with
+   the emulator snapshot `ente-test`:
+   `emulator -avd <avd> -snapshot ente-test -no-snapshot-save`.
 5. **Locks.** Tell the simulator's device lock apart from Ente's app lock. Use
-   the simulator controls, a known test PIN or simulated biometrics. The account
-   password is not a PIN. If an unknown app PIN blocks you, use a separate
-   throwaway simulator. Never erase Aman's simulator or reset the account.
+   the simulator controls or simulated biometrics. If a lock the task didn't
+   cause blocks you, delete the copy and clone a fresh one. Never erase or reset
+   `Ente Test`.
 6. Screenshots show layout, not persistence, permissions or races. Check those
    another way: reopen the app, use a second device, or read logs.
 7. **Report** the journey, device and OS, before and after, and anything odd you

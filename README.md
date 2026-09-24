@@ -85,13 +85,21 @@ It does four things:
    Existing files are moved aside to `*.before-ente-skills-<time>` first.
    Edit `instructions.md` here and push; the other Mac gets it with `git pull`.
 
-## Test login for `/verify`
+## Test simulator for `/verify`
 
-`/verify` logs in to the mobile apps with a dedicated Ente test account, never
-your real one. Keep it on each Mac, outside Git, readable only by you:
-`~/.config/ente-skills/mobile-test-account.json` with `{"email": "...",
-"password": "..."}` and `chmod 600`. Agents read the path, never print the
-password.
+Agents never type passwords, so `/verify` works on copies of a simulator that's
+already logged in. Set it up once on each Mac:
+
+1. `xcrun simctl create "Ente Test" "iPhone 17"`, then boot it and open it in
+   Simulator.
+2. Run Photos and Locker from `main` on it and log in to the **test account**
+   (never your real one). Grant the permissions the apps ask for, and don't set
+   an Ente app lock.
+3. `xcrun simctl shutdown "Ente Test"`. Leave it alone after that; `/verify`
+   clones it for each check and deletes the copy afterwards.
+
+Log in again only if the test account's session expires. For Android, log in on
+an emulator and save a snapshot: `adb emu avd snapshot save ente-test`.
 
 ## Discord for `/signals`
 
