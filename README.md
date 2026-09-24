@@ -12,15 +12,33 @@ Aman's personal skills for Ente work. Claude Code and Codex both read them
 | `/openpr` | Final checks, changes entry, cross-model review, one approval, then commit and open the PR on the fork. `/openpr upstream` opens it on ente/ente after the Codex bot's 👍. |
 | `/pr-feedback` | Work through review comments, bot findings and CI failures on your PR. |
 | `/support` | Draft an answer to a support ticket. Never sends. |
-| `/review-pr` | Review someone else's PR, including Auth icon PRs. Posts only after your OK. |
+| `/review-icons` | Review an Auth icon PR with the preview site. Posts only after your OK. |
 | `/cleanup` | After ente/ente merges: close the fork PR, delete the worktree and local branch. `/cleanup merged` does all of them; `/cleanup disk` frees simulator and build space. |
 | `/learn` | Turn something you keep repeating into a check, a skill line or a memory note. |
 | `/today` | What needs you: open PRs, red CI, comments, tasks in progress, worktrees to clean up. |
 
 The commands call these helpers when a task needs them. You can also call them
-directly: `investigate`, `blast-radius`, `designer`, `verify`, `perf`,
-`migrate`, `deps`, `challenge`. `copywriter` and `recent-code-bugfix` are kept
-from the old setup.
+directly: `investigate`, `designer`, `verify`, `migrate`, `challenge`.
+`copywriter` and `recent-code-bugfix` are kept from the old setup.
+
+## Built-ins we use instead of writing our own
+
+| Job | Claude Code | Codex |
+| --- | --- | --- |
+| Review someone else's PR | `/code-review <PR number>` (`--comment` posts) | `codex review`, `review-agent` skill |
+| Review your own diff, same model | `/code-review` | `codex review --base main` |
+| Simplify your diff | `/simplify` (`/openpr` runs it) | none |
+| Security pass | `/security-review` | none |
+| Before/after diagrams | Mermaid or inline visuals | `visualize` plugin |
+| Run and drive the app | `run` skill, simulator tools | `computer-use`, `browser` plugins |
+| Continue a chat | `/resume`, `/branch` | `codex resume`, `codex fork` |
+| Write a new skill | `skill-creator` | `skill-creator` |
+| PR comments and CI logs | (none; use `/pr-feedback`) | GitHub plugin: `gh-address-comments`, `gh-fix-ci` |
+| Flutter, Dart, Figma | `dart-flutter`, `figma` plugins | `dart-flutter`, `figma` plugins |
+
+Not used: Codex's `yeet` (AGENTS.md forbids it; it opens draft PRs through the
+connector), and Claude's `commit-commands` plugin (`/commit-push-pr` knows
+nothing about the fork-then-ente/ente flow).
 
 ## Rules every skill keeps
 

@@ -1,3 +1,8 @@
+---
+name: review-icons
+description: Review an Ente Auth custom-icon pull request (SVGs and the icon registry) using the diff and the light/dark icon preview site, then draft an approval or specific feedback for Aman. Use for Auth icon PRs. For any other PR, use the app's built-in code review.
+---
+
 # Auth icon PRs
 
 Use authenticated `gh` for the PR and the browser for the preview. No checkout,

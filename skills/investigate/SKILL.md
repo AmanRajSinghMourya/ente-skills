@@ -1,6 +1,6 @@
 ---
 name: investigate
-description: Find out how Ente code works, why it's shaped that way, or why something breaks (bug, crash, ANR, OOM, wrong data), with evidence. Read-only. Use for /investigate, "why does X happen", "how does X work", "root cause this", or a bug picked up by pickup-task.
+description: Find out how Ente code works, why it's shaped that way, why something breaks (bug, crash, ANR, OOM, wrong data), or why it's slow, with evidence. Read-only. Use for /investigate, "why does X happen", "how does X work", "root cause this", "why is this slow", or a bug picked up by pickup-task.
 ---
 
 # Investigate
@@ -36,5 +36,15 @@ a file, a screen, a Sentry issue, a log or a user report.
    - the next step
 
    Use plain words and define terms he may not know. No hedging filler.
+
+## Slow, janky or memory-heavy
+
+Measure before reading code. Pick one number with a unit and how you measure it:
+frame times (Flutter DevTools, `flutter run --profile`), startup time, memory
+(Instruments or `adb shell dumpsys meminfo`), or sync/upload time. Take a
+baseline on a profile or release build, never debug, on the same device, over a
+few runs. Form hypotheses from the trace. Then change one thing at a time,
+measure after each, and keep only what moves the number. Report before and
+after with the unit, device and build mode.
 
 When `pickup-task` called this, go back to its plan step afterwards.

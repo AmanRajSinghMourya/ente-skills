@@ -5,6 +5,10 @@ description: Prove an Ente change works on the real app or server. Drive the mob
 
 # Verify on the real thing
 
+These are the Ente-specific facts. The driving itself is built in: Claude Code's
+`run` skill looks for a project skill like this one, and Codex uses its
+`computer-use` and `browser` plugins.
+
 Skip this if Aman said he'll test it himself. Only one agent drives a simulator
 at a time; if another chat is using it, wait or ask.
 

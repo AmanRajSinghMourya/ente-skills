@@ -20,11 +20,11 @@ what the code, the issue or the history can't answer.
 | The task is | Also use |
 | --- | --- |
 | A bug, crash, ANR or wrong behavior | `investigate`. Reproduce first. |
+| Slow, janky or memory-heavy | `investigate`, its measuring section |
 | UI, UX, copy or a Figma link | `designer` |
-| New behavior, or a change to existing behavior | `blast-radius` |
-| Slow, janky or memory-heavy | `perf` |
+| New behavior, or a change to existing behavior | [Blast radius](#blast-radius) below |
 | A move to `ente_components` or a similar migration | `migrate` |
-| A package added or updated | `deps` |
+| A package added or updated | [Dependencies](#dependencies) below |
 | Only a question | `investigate`. Answer in chat and stop. No worktree. |
 
 A task can match more than one row.
@@ -62,7 +62,11 @@ After the go:
 6. Once the code shape settles, run the checks the matching
    `.github/workflows/*` job runs.
 7. Report in chat: what changed, what the checks and verification showed, what's
-   untested. Suggest `/openpr`.
+   untested. For a bug fix or refactor that isn't obvious from the diff, draw the
+   before and after flow with the app's built-in diagrams (Mermaid, Claude's
+   inline visuals, or Codex's `visualize` plugin). Mark what changed, and name
+   the test that proves the behavior. A diagram explains the change; only a test
+   proves it. Suggest `/openpr`.
 
 ## Rules
 
@@ -85,10 +89,44 @@ Apply these when they fit the task:
 - Tests call the code the way users do and assert a literal expected result.
 - Say what's established, what isn't, and the concrete way to settle it.
 
+## Blast radius
+
+For new or changed behavior, find what could break beyond the diff, not just its
+callers. Name the one fact the change is safe because of (for example "old
+clients ignore this field") and prove it as cheaply as you can: point at the
+line, or better, run a test or script against the real code. Look where grep
+stops:
+
+- shared packages used by several apps (`mobile/packages/*`)
+- old app versions still talking to the server
+- local SQLite schema and data already on users' devices
+- encryption and serialization formats
+- background isolates, sync and upload queues, app lock
+- iOS, Android and desktop differences, and feature flags
+
+Put the risks and that one fact in the plan.
+
+## Dependencies
+
+Adding or updating a package needs Aman's OK in the plan. Check advisories
+first: pub.dev and GitHub advisories for Dart, RustSec for Rust, `govulncheck`
+for Go, npm/GitHub/Socket for JS. Read the changelog for breaking changes, dry
+run first (`dart pub upgrade --dry-run`, `cargo update --dry-run`, JS installs
+with `--ignore-scripts`), and read the lockfile diff for surprise bumps.
+
+## Handoff
+
+To continue in the same app, use its built-in: `/resume` or `/branch` in Claude
+Code, `codex resume` or `codex fork` in Codex. When Aman wants a fresh chat or
+the other agent, write a handoff message in the chat for him to paste: the
+goal, the worktree, branch and PR, the decisions he made (quote them), what's
+done and verified, what's left, and how to check it. Don't write it to a file.
+
 ## Resume
 
-Read the task's TODO line for its worktree and PR, and move this chat into that
-worktree first (build step 2). Then run
+Start from Aman's handoff message if he pasted one. Read the task's TODO line
+for its worktree and PR, and move this chat into that worktree first (build
+step 2). Then run
 `git -C <worktree> status`, `git -C <worktree> log origin/main..HEAD`, look at
 the diff, and `gh pr view` if a PR exists. Tell Aman where it stands and what's
 next. Don't redo finished work. Ask only for decisions you can't find in the

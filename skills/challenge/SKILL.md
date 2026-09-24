@@ -5,6 +5,10 @@ description: Get an independent read-only review of the current Ente change from
 
 # Cross-model review
 
+This exists only to get the other model's opinion. For a same-model review, use
+the built-ins: `/code-review` in Claude Code, `codex review` or the
+`review-agent` skill in Codex.
+
 1. Write a short context file for the reviewer: what the change must do (the
    agreed behavior), what you verified and how, and what's untested. Put it
    outside the repo. The script copies it, so the reviewer sees only that copy.
