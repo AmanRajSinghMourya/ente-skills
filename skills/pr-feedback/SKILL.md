@@ -5,9 +5,8 @@ description: Work through review comments, bot findings (including the automated
 
 # PR feedback
 
-In Codex, the GitHub plugin's `gh-address-comments` and `gh-fix-ci` skills can
-collect threads and CI logs. The rules below still decide what gets fixed and
-what gets posted.
+Use the `gh` CLI for everything here; it's faster than the GitHub plugin or
+connector.
 
 1. **Find the PR** from the number or URL, or from the current branch. Confirm
    where it lives with `gh pr view <pr> --json

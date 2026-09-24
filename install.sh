@@ -37,6 +37,26 @@ for target in "$HOME/.claude/skills" "$HOME/.codex/skills"; do
   done
 done
 
+if [[ $switch -eq 1 ]]; then
+  for file in "$HOME/.claude/CLAUDE.md" "$HOME/.codex/AGENTS.md"; do
+    python3 - "$file" "$root/reminder.md" <<'EOF'
+import os, re, sys
+path, reminder = sys.argv[1], open(sys.argv[2]).read().strip()
+block = f"<!-- ente-skills:start -->\n{reminder}\n<!-- ente-skills:end -->"
+text = open(path).read() if os.path.exists(path) else ""
+pattern = re.compile(r"<!-- ente-skills:start -->.*?<!-- ente-skills:end -->", re.S)
+if pattern.search(text):
+    new = pattern.sub(lambda _: block, text)
+else:
+    new = text.rstrip("\n") + ("\n\n" if text.strip() else "") + block + "\n"
+if new != text:
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    open(path, "w").write(new)
+    print(f"updated skill reminder in {path}")
+EOF
+  done
+fi
+
 mkdir -p "$root/todo"
 if [[ ! -f "$root/todo/TODO.md" ]]; then
   printf '## Up next\n\n## In progress\n\n## Later\n\n## Done\n' > "$root/todo/TODO.md"

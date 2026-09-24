@@ -62,11 +62,7 @@ After the go:
 6. Once the code shape settles, run the checks the matching
    `.github/workflows/*` job runs.
 7. Report in chat: what changed, what the checks and verification showed, what's
-   untested. For a bug fix or refactor that isn't obvious from the diff, draw the
-   before and after flow with the app's built-in diagrams (Mermaid, Claude's
-   inline visuals, or Codex's `visualize` plugin). Mark what changed, and name
-   the test that proves the behavior. A diagram explains the change; only a test
-   proves it. Suggest `/openpr`.
+   untested. Suggest `/openpr`.
 
 ## Rules
 
@@ -114,17 +110,9 @@ for Go, npm/GitHub/Socket for JS. Read the changelog for breaking changes, dry
 run first (`dart pub upgrade --dry-run`, `cargo update --dry-run`, JS installs
 with `--ignore-scripts`), and read the lockfile diff for surprise bumps.
 
-## Handoff
-
-To continue in the same app, use its built-in: `/resume` or `/branch` in Claude
-Code, `codex resume` or `codex fork` in Codex. When Aman wants a fresh chat or
-the other agent, write a handoff message in the chat for him to paste: the
-goal, the worktree, branch and PR, the decisions he made (quote them), what's
-done and verified, what's left, and how to check it. Don't write it to a file.
-
 ## Resume
 
-Start from Aman's handoff message if he pasted one. Read the task's TODO line
+Start from Aman's `/handoff` message if he pasted one. Read the task's TODO line
 for its worktree and PR, and move this chat into that worktree first (build
 step 2). Then run
 `git -C <worktree> status`, `git -C <worktree> log origin/main..HEAD`, look at

@@ -16,6 +16,7 @@ Aman's personal skills for Ente work. Claude Code and Codex both read them
 | `/cleanup` | After ente/ente merges: close the fork PR, delete the worktree and local branch. `/cleanup merged` does all of them; `/cleanup disk` frees simulator and build space. |
 | `/learn` | Turn something you keep repeating into a check, a skill line or a memory note. |
 | `/today` | What needs you: open PRs, red CI, comments, tasks in progress, worktrees to clean up. |
+| `/handoff` | A paste-ready message to continue a task in a fresh chat or the other agent. |
 
 The commands call these helpers when a task needs them. You can also call them
 directly: `investigate`, `designer`, `verify`, `migrate`, `challenge`.
@@ -29,16 +30,16 @@ directly: `investigate`, `designer`, `verify`, `migrate`, `challenge`.
 | Review your own diff, same model | `/code-review` | `codex review --base main` |
 | Simplify your diff | `/simplify` (`/openpr` runs it) | none |
 | Security pass | `/security-review` | none |
-| Before/after diagrams | Mermaid or inline visuals | `visualize` plugin |
+| Diagrams (data flow, before/after) | ask for a Mermaid diagram | `visualize` skill |
 | Run and drive the app | `run` skill, simulator tools | `computer-use`, `browser` plugins |
 | Continue a chat | `/resume`, `/branch` | `codex resume`, `codex fork` |
 | Write a new skill | `skill-creator` | `skill-creator` |
-| PR comments and CI logs | (none; use `/pr-feedback`) | GitHub plugin: `gh-address-comments`, `gh-fix-ci` |
 | Flutter, Dart, Figma | `dart-flutter`, `figma` plugins | `dart-flutter`, `figma` plugins |
 
-Not used: Codex's `yeet` (AGENTS.md forbids it; it opens draft PRs through the
-connector), and Claude's `commit-commands` plugin (`/commit-push-pr` knows
-nothing about the fork-then-ente/ente flow).
+Not used: Codex's `yeet` and GitHub-plugin skills (they go through the slower
+connector; every PR step here uses the `gh` CLI, and AGENTS.md forbids `yeet`),
+and Claude's `commit-commands` plugin (`/commit-push-pr` knows nothing about
+the fork-then-ente/ente flow).
 
 ## Rules every skill keeps
 
@@ -68,7 +69,7 @@ the task's changes.
 ./install.sh --switch   # also remove the old ente-workflow skill links
 ```
 
-It does three things:
+It does four things:
 
 1. Links every skill here into `~/.claude/skills` and `~/.codex/skills`. It
    skips names that already exist. `--switch` first removes links that point
@@ -78,3 +79,8 @@ It does three things:
 3. Installs the official plugins into each app: `dart-flutter` (Flutter and Dart
    skills plus the Dart MCP server, from `flutter/skills`) and `figma`. Each app
    keeps its own copy and updates it, so they aren't stored here.
+4. With `--switch`, writes the short block in `reminder.md` into
+   `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md` between
+   `<!-- ente-skills:start -->` markers, and replaces it on later runs. It lists
+   these skills and tells the agent to end a reply with a one-line tip when you
+   did by hand something a skill does.

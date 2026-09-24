@@ -17,6 +17,9 @@ They win over this file. As Claude, skip the lines that only apply inside the
 Codex app (confetti, network escalation). If that file is missing on this Mac,
 stop and tell Aman.
 
+Do all GitHub work with the `gh` CLI. Never use Codex's `yeet` skill or the
+GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
+
 1. **Scope.** In the task worktree, check `git status` and the diff against
    `origin/main`. Only this task's changes go in. Never restage or edit files
    Aman staged.
@@ -27,8 +30,7 @@ stop and tell Aman.
 3. **Built-in cleanups, in Claude Code only.** Run `/simplify` on the diff
    (simpler code, reuse, no waste; it edits files). For changes to encryption,
    auth, sharing or the server, also run `/security-review`. Codex has no
-   equivalent, so skip this step there. Never use Codex's `yeet` skill;
-   AGENTS.md forbids it.
+   equivalent, so skip this step there.
 4. **Checks.** Run the lints and tests from the matching `.github/workflows/*`
    job on the final content. For the server, use
    `./scripts/test-with-postgres.sh host`.
