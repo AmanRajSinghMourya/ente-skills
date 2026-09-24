@@ -66,7 +66,7 @@ the task's changes.
 
 ```sh
 ./install.sh            # add these skills next to whatever is installed
-./install.sh --switch   # also remove the old ente-workflow skill links
+./install.sh --switch   # also remove old ente-workflow links and link the global instructions
 ```
 
 It does four things:
@@ -79,8 +79,7 @@ It does four things:
 3. Installs the official plugins into each app: `dart-flutter` (Flutter and Dart
    skills plus the Dart MCP server, from `flutter/skills`) and `figma`. Each app
    keeps its own copy and updates it, so they aren't stored here.
-4. With `--switch`, writes the short block in `reminder.md` into
-   `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md` between
-   `<!-- ente-skills:start -->` markers, and replaces it on later runs. It lists
-   these skills and tells the agent to end a reply with a one-line tip when you
-   did by hand something a skill does.
+4. With `--switch`, links `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md` to
+   `instructions.md`, so both apps and both Macs read the same global rules.
+   Existing files are moved aside to `*.before-ente-skills-<time>` first.
+   Edit `instructions.md` here and push; the other Mac gets it with `git pull`.
