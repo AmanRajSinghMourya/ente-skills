@@ -60,11 +60,13 @@ if [[ ! -f "$root/todo/TODO.md" ]]; then
 fi
 
 if command -v claude >/dev/null; then
-  claude plugin marketplace list 2>/dev/null | grep -q 'dart-flutter' \
+  markets="$(claude plugin marketplace list 2>/dev/null)"
+  plugins="$(claude plugin list 2>/dev/null)"
+  grep -q 'dart-flutter' <<<"$markets" \
     || claude plugin marketplace add flutter/skills \
     || echo "FAILED: claude marketplace flutter/skills"
   for plugin in dart-flutter@dart-flutter figma@claude-plugins-official; do
-    claude plugin list 2>/dev/null | grep -q "$plugin" \
+    grep -q "$plugin" <<<"$plugins" \
       || claude plugin install --scope user "$plugin" \
       || echo "FAILED: claude plugin $plugin"
   done
@@ -73,11 +75,13 @@ else
 fi
 
 if command -v codex >/dev/null; then
-  codex plugin marketplace list 2>/dev/null | grep -q '^dart-flutter ' \
+  markets="$(codex plugin marketplace list 2>/dev/null)"
+  plugins="$(codex plugin list 2>/dev/null)"
+  grep -q '^dart-flutter ' <<<"$markets" \
     || codex plugin marketplace add flutter/skills \
     || echo "FAILED: codex marketplace flutter/skills"
   for plugin in dart-flutter@dart-flutter figma@openai-curated-remote; do
-    codex plugin list 2>/dev/null | grep -qE "^$plugin +installed" \
+    grep -qE "^$plugin +installed" <<<"$plugins" \
       || codex plugin add "$plugin" \
       || echo "FAILED: codex plugin $plugin"
   done
