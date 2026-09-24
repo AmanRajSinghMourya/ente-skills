@@ -43,7 +43,7 @@ Ente-only rules:
 - For design, UI/UX or Figma tasks, use the `designer` skill. Aman's current decisions take precedence over the imported team kit.
 - Implementation tasks go through `pickup-task`, PRs through `openpr`, and finished tasks through `cleanup`. Standalone investigation and review stay read-only.
 - If a step needs a tool only the other app has, say so and hand it back. Never claim it ran.
-- To test the mobile apps, log in with the dedicated Ente test account in `~/.config/ente-skills/mobile-test-account.json` (`email`, `password`) without asking Aman. Read it only at a login screen. Never print, commit or paste the password anywhere else. If the file is missing, ask Aman to create it with the command in the ente-skills README; never ask him to paste the password into the chat, and never write the file yourself. Claude Code doesn't type passwords, so there ask Aman to log in once; the app stays logged in when a new build is installed over it.
+- To test the mobile apps, log in with the dedicated Ente test account Aman gave you (Codex keeps it in its memory), never his real account, and don't stop to ask. Claude Code doesn't type passwords, so there ask Aman to log in once; the app stays logged in when a new build is installed over it.
 - Before creating a PR, run the lints and tests from the corresponding `.github/workflow` (Some things might need local adaptation, e.g. for server use "./scripts/test-with-postgres.sh host" since instead of docker)
 - Create a ready-to-review PR, not a draft.
 - When creating a PR, use no body if unnecessary. If you do feel the need, a minimal body is fine, but ask me first. No mention of irrelevant details like the checks you ran etc.

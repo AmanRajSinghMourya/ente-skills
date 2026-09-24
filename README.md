@@ -87,18 +87,9 @@ It does four things:
 
 ## Test login
 
-Agents log in to the mobile apps with a dedicated Ente **test account**, never
-your real one, so they don't stop at the login screen. The details stay on each
-Mac, outside Git. Create the file once per Mac and fill in
-`{"email": "...", "password": "..."}`:
-
-```sh
-mkdir -p ~/.config/ente-skills && touch ~/.config/ente-skills/mobile-test-account.json && chmod 600 ~/.config/ente-skills/mobile-test-account.json && nano ~/.config/ente-skills/mobile-test-account.json
-```
-
-Codex types these details on the login screen. Claude Code doesn't type
-passwords, so it asks you to log in once; the app stays logged in when a new
-build is installed over it.
+Tell Codex the test account's email and password once and ask it to remember
+them. Claude Code doesn't type passwords, so log in yourself once on the
+simulator; the app stays logged in across new builds.
 
 ## Discord for `/signals`
 
