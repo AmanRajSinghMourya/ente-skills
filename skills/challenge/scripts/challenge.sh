@@ -94,7 +94,9 @@ EOF
 
 run_codex() {
   local out="$out_dir/review-codex.md"
-  ENTE_CHALLENGE_REVIEWER=1 codex exec --sandbox read-only --ephemeral -C "$repo" \
+  local model=()
+  if [[ -n "${ENTE_CHALLENGE_CODEX_MODEL:-}" ]]; then model=(-m "$ENTE_CHALLENGE_CODEX_MODEL"); fi
+  ENTE_CHALLENGE_REVIEWER=1 codex exec "${model[@]}" --sandbox read-only --ephemeral -C "$repo" \
     --output-last-message "$out" < "$prompt" > "$out_dir/codex.log" 2>&1
   report codex "$?" "$out"
 }

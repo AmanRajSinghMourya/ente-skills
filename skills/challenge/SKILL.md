@@ -34,6 +34,10 @@ the built-ins: `/code-review` in Claude Code, `codex review` or the
      is incomplete. Say so; never present it as a pass.
    - From inside Codex, the first run of `claude` may need network or keychain
      permission.
+   - If the Codex review fails with "model is not supported", the `codex` CLI
+     is older than the model picked in the Codex app. Rerun with
+     `ENTE_CHALLENGE_CODEX_MODEL=<a model the CLI accepts>` set, and tell Aman
+     the CLI needs updating.
 3. Check every finding against the source yourself. Tell Aman the ones that
    matter and what you did with each: fixed, rejected with the reason, or needs
    his call. Then delete the review folder the script printed; it holds a copy
