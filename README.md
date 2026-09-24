@@ -20,7 +20,7 @@ Aman's personal skills for Ente work. Claude Code and Codex both read them
 | `/signals` | What users say about Photos and Locker mobile: tickets, GitHub, Discord, crashes. `/today` includes it. |
 
 The commands call these helpers when a task needs them. You can also call them
-directly: `investigate`, `designer`, `verify`, `migrate`, `challenge`.
+directly: `investigate`, `designer`, `migrate`, `challenge`.
 `copywriter` and `recent-code-bugfix` are kept from the old setup.
 
 ## Built-ins we use instead of writing our own
@@ -85,21 +85,20 @@ It does four things:
    Existing files are moved aside to `*.before-ente-skills-<time>` first.
    Edit `instructions.md` here and push; the other Mac gets it with `git pull`.
 
-## Test simulator for `/verify`
+## Test login
 
-Agents never type passwords, so `/verify` works on copies of a simulator that's
-already logged in. Set it up once on each Mac:
+Agents log in to the mobile apps with a dedicated Ente **test account**, never
+your real one, so they don't stop at the login screen. The details stay on each
+Mac, outside Git. Create the file once per Mac and fill in
+`{"email": "...", "password": "..."}`:
 
-1. `xcrun simctl create "Ente Test" "iPhone 17"`, then boot it and open it in
-   Simulator.
-2. Run Photos and Locker from `main` on it and log in to the **test account**
-   (never your real one). Grant the permissions the apps ask for, and don't set
-   an Ente app lock.
-3. `xcrun simctl shutdown "Ente Test"`. Leave it alone after that; `/verify`
-   clones it for each check and deletes the copy afterwards.
+```sh
+mkdir -p ~/.config/ente-skills && touch ~/.config/ente-skills/mobile-test-account.json && chmod 600 ~/.config/ente-skills/mobile-test-account.json && nano ~/.config/ente-skills/mobile-test-account.json
+```
 
-Log in again only if the test account's session expires. For Android, log in on
-an emulator and save a snapshot: `adb emu avd snapshot save ente-test`.
+Codex types these details on the login screen. Claude Code doesn't type
+passwords, so it asks you to log in once; the app stays logged in when a new
+build is installed over it.
 
 ## Discord for `/signals`
 

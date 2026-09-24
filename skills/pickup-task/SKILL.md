@@ -57,8 +57,9 @@ After the go:
    rerun the same test. If no reliable automated reproduction exists, say what
    you'll use instead before fixing.
 4. Feature: derive tests from the agreed behavior where feasible.
-5. UI or runtime behavior: use `verify` before and after, unless Aman said he'll
-   test it himself.
+5. UI or runtime behavior: run the app on a simulator before and after the
+   change (Claude Code's `run` skill, or Codex's computer use), unless Aman said
+   he'll test it himself.
 6. Once the code shape settles, run the checks the matching
    `.github/workflows/*` job runs.
 7. Report in chat: what changed, what the checks and verification showed, what's

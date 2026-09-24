@@ -6,8 +6,8 @@ description: Move Ente mobile screens or packages from ente_ui to ente_component
 # Design-system migration
 
 1. **Pin the current look and behavior first:** before-screenshots of the
-   screen's states (light and dark, empty, error, loading) with the `verify`
-   skill, plus any existing widget tests.
+   screen's states (light and dark, empty, error, loading) on a simulator,
+   plus any existing widget tests.
 2. **Find the precedent:** a screen in the same app that's already migrated.
    Copy its shape.
 3. **Rules:**

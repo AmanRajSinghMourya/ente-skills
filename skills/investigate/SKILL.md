@@ -13,8 +13,7 @@ a file, a screen, a Sentry issue, a log or a user report.
    sync. Note which app and which shared package (`mobile/packages/*`) it runs
    in.
 2. **What actually happens (bugs).** Get runtime evidence before theorizing:
-   - reproduce it with a test, the `verify` skill on a simulator, or the local
-     server
+   - reproduce it with a test, on a simulator, or on the local server
    - for crashes, Sentry events and stack traces (Sentry tools) and any device
      logs Aman supplies
 

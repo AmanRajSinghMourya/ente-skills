@@ -22,6 +22,12 @@ for target in "$HOME/.claude/skills" "$HOME/.codex/skills"; do
       fi
     done
   fi
+  for link in "$target"/*; do
+    if [[ -L "$link" && "$(readlink "$link")" == "$root/skills/"* && ! -e "$link" ]]; then
+      rm "$link"
+      echo "removed link to deleted skill $link"
+    fi
+  done
   for skill in "$root"/skills/*/; do
     src="${skill%/}"
     link="$target/$(basename "$src")"
