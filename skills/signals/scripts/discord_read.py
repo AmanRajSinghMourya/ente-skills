@@ -31,10 +31,9 @@ def snowflake_at(epoch_seconds):
     return (int(epoch_seconds * 1000) - DISCORD_EPOCH_MS) << 22
 
 
-def fetch(channel, token, after):
-    url = f"https://discord.com/api/v10/channels/{channel}/messages?limit=100&after={after}"
+def get(path, token):
     request = urllib.request.Request(
-        url,
+        f"https://discord.com/api/v10{path}",
         headers={"Authorization": f"Bot {token}", "User-Agent": "ente-skills-signals (1.0)"},
     )
     while True:
@@ -45,7 +44,7 @@ def fetch(channel, token, after):
             if error.code == 429:
                 time.sleep(float(json.load(error).get("retry_after", 1)))
                 continue
-            print(f"Discord API error {error.code} for channel {channel}", file=sys.stderr)
+            print(f"Discord API error {error.code} for {path}", file=sys.stderr)
             sys.exit(1)
 
 
@@ -55,10 +54,11 @@ def main():
     channel = sys.argv[1]
     hours = float(sys.argv[2]) if len(sys.argv) == 3 else 24.0
     token = bot_token()
+    guild = get(f"/channels/{channel}", token).get("guild_id", "@me")
     after = snowflake_at(time.time() - hours * 3600)
     messages = []
     while True:
-        batch = fetch(channel, token, after)
+        batch = get(f"/channels/{channel}/messages?limit=100&after={after}", token)
         if not batch:
             break
         messages.extend(batch)
@@ -70,7 +70,8 @@ def main():
         who = "bot" if author.get("bot") else author.get("username", "?")
         text = " ".join(message.get("content", "").split())
         if text:
-            print(f"{message['timestamp'][:16]} {who}: {text}")
+            link = f"https://discord.com/channels/{guild}/{channel}/{message['id']}"
+            print(f"{message['timestamp'][:16]} {who}: {text} <{link}>")
 
 
 if __name__ == "__main__":

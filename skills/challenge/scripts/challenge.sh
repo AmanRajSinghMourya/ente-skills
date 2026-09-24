@@ -2,7 +2,7 @@
 set -uo pipefail
 
 usage() {
-  echo "usage: challenge.sh --from claude|codex --repo DIR --base REF [--context FILE] [--reviewer codex|claude|both]" >&2
+  echo "usage: challenge.sh --from claude|codex --repo DIR --base REF [--context FILE] [--new-files FILE] [--reviewer codex|claude|both]" >&2
   exit 2
 }
 
@@ -11,7 +11,7 @@ if [[ "${ENTE_CHALLENGE_REVIEWER:-}" == 1 ]]; then
   exit 3
 fi
 
-from="" reviewer="" repo="" base="" context=""
+from="" reviewer="" repo="" base="" context="" new_files=""
 while [[ $# -gt 0 ]]; do
   [[ $# -ge 2 ]] || usage
   case "$1" in
@@ -20,6 +20,7 @@ while [[ $# -gt 0 ]]; do
     --repo) repo="$2" ;;
     --base) base="$2" ;;
     --context) context="$2" ;;
+    --new-files) new_files="$2" ;;
     *) usage ;;
   esac
   shift 2
@@ -40,6 +41,9 @@ base_sha="$(git -C "$repo" rev-parse --verify "$base^{commit}")" || exit 2
 if [[ -n "$context" ]]; then
   [[ -f "$context" ]] || { echo "context file not found: $context" >&2; exit 2; }
 fi
+if [[ -n "$new_files" ]]; then
+  [[ -f "$new_files" ]] || { echo "new-files list not found: $new_files" >&2; exit 2; }
+fi
 
 out_dir="${TMPDIR:-/tmp}/challenge/$(basename "$repo")-$(date +%Y%m%d-%H%M%S)-$$"
 mkdir -p "$out_dir"
@@ -59,6 +63,10 @@ if ! git -C "$repo" ls-files --others --exclude-standard -z > "$untracked"; then
   exit 5
 fi
 while IFS= read -r -d '' file; do
+  if [[ -z "$new_files" ]] || ! grep -qxF -- "$file" "$new_files"; then
+    echo "not sent (untracked, not in --new-files): $file" >&2
+    continue
+  fi
   git -C "$repo" diff --no-index -- /dev/null "$file" >> "$patch"
   if [[ $? -gt 1 ]]; then
     echo "failed to add untracked file to the diff: $file" >&2
@@ -74,7 +82,7 @@ prompt="$out_dir/prompt.md"
 {
   echo "You are an independent reviewer of one code change in the repository at $repo."
   echo "Base commit: $base_sha"
-  echo "The full change, tracked diff plus untracked files, is in $patch."
+  echo "The change, the tracked diff plus the new files the author confirmed as part of it, is in $patch."
   if [[ -n "$context" ]]; then
     echo "The author's notes on intended behavior and verification are in $context."
   fi
@@ -96,7 +104,7 @@ run_codex() {
   local out="$out_dir/review-codex.md"
   local model=()
   if [[ -n "${ENTE_CHALLENGE_CODEX_MODEL:-}" ]]; then model=(-m "$ENTE_CHALLENGE_CODEX_MODEL"); fi
-  ENTE_CHALLENGE_REVIEWER=1 codex exec "${model[@]}" --sandbox read-only --ephemeral -C "$repo" \
+  ENTE_CHALLENGE_REVIEWER=1 codex exec ${model[@]+"${model[@]}"} --sandbox read-only --ephemeral -C "$repo" \
     --output-last-message "$out" < "$prompt" > "$out_dir/codex.log" 2>&1
   report codex "$?" "$out"
 }

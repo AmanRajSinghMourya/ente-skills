@@ -85,6 +85,14 @@ It does four things:
    Existing files are moved aside to `*.before-ente-skills-<time>` first.
    Edit `instructions.md` here and push; the other Mac gets it with `git pull`.
 
+## Test login for `/verify`
+
+`/verify` logs in to the mobile apps with a dedicated Ente test account, never
+your real one. Keep it on each Mac, outside Git, readable only by you:
+`~/.config/ente-skills/mobile-test-account.json` with `{"email": "...",
+"password": "..."}` and `chmod 600`. Agents read the path, never print the
+password.
+
 ## Discord for `/signals`
 
 Discord has no official MCP. `/signals` reads channels through a real Discord

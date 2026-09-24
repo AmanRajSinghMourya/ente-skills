@@ -34,7 +34,8 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
 4. **Checks.** Run the lints and tests from the matching `.github/workflows/*`
    job on the final content. For the server, use
    `./scripts/test-with-postgres.sh host`.
-5. **Review.** Run the `challenge` skill. Check each finding against the source,
+5. **Review.** Run the `challenge` skill, passing the task's new files from step 1
+   as `--new-files`. Check each finding against the source,
    fix the confirmed ones within the task, and rerun the affected checks. Do at
    most one re-review, then list what's still open.
 6. **Ask once.** One message with:
@@ -44,12 +45,18 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    - commit groups with messages, tests beside the code they cover
    - the PR title (prefix from the touched paths, per AGENTS.md), head
      repo/branch, base, target repo (the fork `AmanRajSinghMourya/ente` unless
-     Aman picks upstream `ente/ente`, which AGENTS.md calls `ente-io/ente`),
+     Aman picks upstream `ente/ente`),
      gh account, and body (none unless needed)
    - the changes-entry wording
 
    Wait for yes. If the content changes afterwards, ask again.
-7. **Publish.** Check the repo-local commit identity per AGENTS.md. If anything
+7. **Publish.** First bring the fork's `main` up to date, so the fork PR shows
+   only this task's commits: `gh repo sync AmanRajSinghMourya/ente --branch
+   main`. It only fast-forwards; never add `--force`. Then check that
+   `gh api repos/AmanRajSinghMourya/ente/branches/main --jq .commit.sha` equals
+   the same for `ente/ente`. If the sync fails because the histories diverged,
+   stop and tell Aman. Aman has approved this sync; it needs no extra question.
+   Check the repo-local commit identity per AGENTS.md. If anything
    is already staged that isn't part of the agreed groups, stop and ask. Stage
    each group by explicit path and commit it; never use `git add -A`,
    `git commit -a` or `git stash`. Push to the remote that matches the target, and run
@@ -69,8 +76,8 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    stop and tell Aman. Open review comments go through `/pr-feedback` first.
 3. The local branch head must equal the fork PR's `headRefOid`. Otherwise stop.
 4. **Ask once:** target `ente/ente`, base `main`, the push remote for
-   `ente/ente` (check the push URL per AGENTS.md; `ente-io/ente` redirects to
-   it), the branch, and the same title and body as the fork PR.
+   `ente/ente` (check the push URL per AGENTS.md; a remote URL may still say
+   `ente-io/ente`, which redirects to it), the branch, and the same title and body as the fork PR.
 5. After yes, push the branch to that remote. Then run `gh pr create --repo
    ente/ente --head <branch> --base main` with the same title and body (ready,
    not draft), and confirm with `gh pr view`. Add the upstream link to the TODO

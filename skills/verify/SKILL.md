@@ -24,7 +24,9 @@ at a time; if another chat is using it, wait or ask.
 3. **Drive** it with the simulator control tool, Maestro or computer use. Prefer
    accessibility labels to coordinates.
 4. **Login** with the test account in
-   `~/.config/ente-workflow/mobile-test-account.json` (`email`, `password`).
+   `~/.config/ente-skills/mobile-test-account.json` (`email`, `password`), or
+   the older `~/.config/ente-workflow/mobile-test-account.json` if that's where
+   it still is on this Mac.
    Aman allows it for verification. Never print or copy the password anywhere.
    If the file is missing, ask him.
 5. **Locks.** Tell the simulator's device lock apart from Ente's app lock. Use

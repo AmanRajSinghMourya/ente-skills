@@ -9,8 +9,8 @@ Read-only. Change nothing.
 
 Aman opens each PR on his fork `AmanRajSinghMourya/ente` first, then opens the
 same branch on `ente/ente` after the Codex review bot gives the fork PR a 👍.
-Use `ente/ente`, not the `ente-io/ente` redirect, because `--author @me` returns
-nothing through the redirect.
+Always use `ente/ente`; through the old `ente-io/ente` name, `--author @me`
+returns nothing.
 
 1. **Fork PRs:** `gh pr list --repo AmanRajSinghMourya/ente --state open --json
    number,title,url,headRefName,statusCheckRollup`. For each one:

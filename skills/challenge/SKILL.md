@@ -18,16 +18,19 @@ the built-ins: `/code-review` in Claude Code, `codex review` or the
 
    ```sh
    <skill dir>/scripts/challenge.sh --from claude|codex --repo <worktree> --base <commit or branch> \
-     --context <file> [--reviewer codex|claude|both]
+     --context <file> [--new-files <file>] [--reviewer codex|claude|both]
    ```
 
    - The reviewer defaults to the other model. Use `both` for risky changes
      (server, migrations, encryption, sync) or when Aman asks.
    - A review takes several minutes. Run it in the background or with a long
      timeout.
-   - The reviewer gets the base, the full diff including untracked files, and
-     your context file. It's read-only and can't start another review. Codex
-     reviews in a read-only sandbox. Claude can read files and run only
+   - The reviewer gets the base, the tracked diff, your context file, and only
+     the untracked files listed in `--new-files` (one repo-relative path per
+     line: the new files that belong to the task). Other untracked files are
+     left out, and the script names them.
+   - The reviewer is read-only and can't start another review. Codex reviews in
+     a read-only sandbox. Claude can read files and run only
      `git log`, `show`, `blame`, `diff` and `grep`, so it can't run tests.
    - Each attempt writes its own file. The script prints the path and whether
      the review completed. An empty output or a non-zero exit means the review

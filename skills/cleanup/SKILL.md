@@ -18,7 +18,6 @@ fork PR is closed here.
    branch, only the PR steps apply.
 2. **Find both PRs for the branch.** The upstream PR pushes the same `aman/…`
    branch to `ente/ente`, and the fork PR uses it on `AmanRajSinghMourya/ente`.
-   (`ente-io/ente` redirects to `ente/ente`; use `ente/ente`.)
    ```sh
    gh pr list --repo ente/ente --head <branch> --state all --json number,state,url,headRefOid
    gh pr list --repo AmanRajSinghMourya/ente --head <branch> --state all --json number,state,url,headRefOid
