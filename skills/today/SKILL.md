@@ -36,3 +36,5 @@ nothing through the redirect.
    - Waiting on ente/ente review.
    - Merged upstream, fork PR still open, or worktree left over (`/cleanup`).
    - In progress from TODO.
+6. **Signals:** run the `signals` skill for the last 24 hours and add its theme
+   summary at the end. Skip it if Aman asked for PRs only.

@@ -1,0 +1,2 @@
+# Discord channel IDs the signals skill reads, one per line: <id> <name>.
+# In Discord, turn on Developer Mode, right-click a channel, Copy Channel ID.

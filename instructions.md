@@ -70,8 +70,8 @@ Ente-only rules:
 ## Ente skills
 
 Aman's Ente skills (`/name` in Claude Code, `$name` in Codex): todo,
-pickup-task, openpr, pr-feedback, cleanup, today, support, review-icons, learn,
-handoff, plus the helpers investigate, designer, verify, migrate and challenge.
+pickup-task, openpr, pr-feedback, cleanup, today, signals, support, review-icons,
+learn, handoff, plus the helpers investigate, designer, verify, migrate and challenge.
 For diagrams, use Codex's `visualize` skill.
 
 Aman sometimes forgets these exist. When he asks for something one of them does

@@ -17,6 +17,7 @@ Aman's personal skills for Ente work. Claude Code and Codex both read them
 | `/learn` | Turn something you keep repeating into a check, a skill line or a memory note. |
 | `/today` | What needs you: open PRs, red CI, comments, tasks in progress, worktrees to clean up. |
 | `/handoff` | A paste-ready message to continue a task in a fresh chat or the other agent. |
+| `/signals` | What users say about Photos and Locker mobile: tickets, GitHub, Discord, crashes. `/today` includes it. |
 
 The commands call these helpers when a task needs them. You can also call them
 directly: `investigate`, `designer`, `verify`, `migrate`, `challenge`.
@@ -83,3 +84,18 @@ It does four things:
    `instructions.md`, so both apps and both Macs read the same global rules.
    Existing files are moved aside to `*.before-ente-skills-<time>` first.
    Edit `instructions.md` here and push; the other Mac gets it with `git pull`.
+
+## Discord for `/signals`
+
+Discord has no official MCP. `/signals` reads channels through a real Discord
+bot and the Discord API, which is instant and needs no browser login. Don't
+automate a normal user account: Discord bans "self-bots".
+
+1. At https://discord.com/developers/applications, create an application, open
+   **Bot**, turn on **Message Content Intent**, and copy the token.
+2. Under **OAuth2 → URL Generator**, pick scope `bot` with only **View Channels**
+   and **Read Message History**. A server admin opens the URL to add the bot and
+   limits it to the channels you want read.
+3. On each Mac, store the token in the Keychain (it prompts for it; never put it
+   in Git): `security add-generic-password -s ente-discord-bot -a "$USER" -w`
+4. Add the channel IDs to `skills/signals/channels.txt`.
