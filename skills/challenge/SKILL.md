@@ -1,6 +1,6 @@
 ---
 name: challenge
-description: Get an independent read-only review of the current Ente change from the other model (Codex when Claude is working, Claude when Codex is working), or from both. Use for /challenge, before /openpr, and inside /review-pr.
+description: Get an independent read-only review of the current Ente change from the other model (Codex when Claude is working, Claude when Codex is working), or from both. Use for /challenge and before /openpr.
 ---
 
 # Cross-model review
