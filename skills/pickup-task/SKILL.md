@@ -40,29 +40,35 @@ need no approval. A worktree and code changes do.
 
 After the go:
 
-1. `git fetch origin`. From the main Ente checkout, create the worktree inside
-   it, under `.worktrees/`, from `origin/main`: `B-<surface>-<desc>` for a bug,
-   `F-` for a feature, `I-` for an improvement, on branch
-   `aman/<surface>-<desc>`. Surface is photos, auth, locker, server, web or
-   infra. Make sure the main checkout's `.git/info/exclude` has the line
-   `/.worktrees/`. Add the worktree name to the TODO line.
-2. **Move this chat into the worktree** so the app's diff view shows the work.
-   The diff view follows the chat's folder, and the main checkout's git can't
-   see a worktree's changes. In Claude Code, call `EnterWorktree` with the
-   worktree `path`. In Codex, continue in a thread opened on the worktree
-   folder; if you can't switch, tell Aman before editing. Never edit a worktree
-   from a chat that's still in the main checkout.
-3. Bug: write the focused test first and run it. It must fail because of this
+1. **Work where the chat already is, if you can.** The app's diff view follows
+   the chat's folder, and a Codex chat can't change its folder once started.
+   Branch name: `aman/<surface>-<desc>` (surface: photos, auth, locker, server,
+   web or infra). Run `git fetch origin` first.
+   - **The chat is already in its own Ente worktree** (not the main checkout;
+     for example Codex's worktree mode under `~/.codex/worktrees/`): if it's
+     clean, `git switch -c aman/<surface>-<desc> origin/main` right there. Don't
+     create another worktree.
+   - **The chat is in the main checkout:** create
+     `.worktrees/<B|F|I>-<surface>-<desc>` from `origin/main` on that branch
+     (the main checkout's `.git/info/exclude` must have `/.worktrees/`). In
+     Claude Code, move in with `EnterWorktree` and the worktree `path`. In
+     Codex, which can't move, keep going: edit the worktree by its full path,
+     and tell Aman once that the diff view won't show it and that starting
+     tasks in Codex's worktree mode avoids this.
+
+   Never stop just because the chat can't switch folders. Add the worktree
+   path to the TODO line.
+2. Bug: write the focused test first and run it. It must fail because of this
    bug; a missing import or a broken fixture is not a reproduction. Fix, then
    rerun the same test. If no reliable automated reproduction exists, say what
    you'll use instead before fixing.
-4. Feature: derive tests from the agreed behavior where feasible.
-5. UI or runtime behavior: run the app on a simulator before and after the
+3. Feature: derive tests from the agreed behavior where feasible.
+4. UI or runtime behavior: run the app on a simulator before and after the
    change (Claude Code's `run` skill, or Codex's computer use), unless Aman said
    he'll test it himself.
-6. Once the code shape settles, run the checks the matching
+5. Once the code shape settles, run the checks the matching
    `.github/workflows/*` job runs.
-7. Report in chat: what changed, what the checks and verification showed, what's
+6. Report in chat: what changed, what the checks and verification showed, what's
    untested. Suggest `/openpr`.
 
 ## Rules
@@ -114,8 +120,7 @@ with `--ignore-scripts`), and read the lockfile diff for surprise bumps.
 ## Resume
 
 Start from Aman's `/handoff` message if he pasted one. Read the task's TODO line
-for its worktree and PR, and move this chat into that worktree first (build
-step 2). Then run
+for its worktree and PR, and work in that worktree (build step 1). Then run
 `git -C <worktree> status`, `git -C <worktree> log origin/main..HEAD`, look at
 the diff, and `gh pr view` if a PR exists. Tell Aman where it stands and what's
 next. Don't redo finished work. Ask only for decisions you can't find in the
