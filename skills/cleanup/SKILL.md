@@ -45,9 +45,11 @@ fork PR is closed here.
      Codex, which retires its worktree. A clean, detached leftover there holds
      nothing, so it isn't a blocker.
    - **This chat is running inside the worktree** and can't leave it (Codex):
-     do everything except removing the folder, and say so. `--force` deletes uncommitted, unstaged and untracked
-   files in that worktree; Aman wants them gone, not preserved. List what was
-   discarded (`git -C <worktree> status --short` before removing).
+     do everything except removing the folder, and say so.
+
+   `--force` deletes uncommitted, unstaged and untracked files in that
+   worktree; Aman wants them gone, not preserved. List what was discarded
+   (`git -C <worktree> status --short` before removing).
 7. Tick the TODO line, move it to **Done**, and tell Aman what was removed, which
    PR was closed, and which files were discarded.
 
