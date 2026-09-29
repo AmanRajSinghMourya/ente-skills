@@ -34,10 +34,18 @@ fork PR is closed here.
 5. **Commits that never reached a PR:** `git -C <worktree> log --oneline
    <headRefOid of the latest PR>..<branch>`. If any print, show them and ask;
    deleting the branch loses them.
-6. **Remove,** from the main checkout. If this chat is inside the worktree,
-   leave it first (in Claude Code, `ExitWorktree` with `keep`). Then
-   `git worktree remove --force <path>`, `git branch -D <branch>`,
-   `git worktree prune`. `--force` deletes uncommitted, unstaged and untracked
+6. **Remove,** from the main checkout. Which worktree it is decides how:
+   - **Under `.worktrees/`** (ours): if this chat is inside it, leave it first
+     (in Claude Code, `ExitWorktree` with `keep`). Then
+     `git worktree remove --force <path>`, `git branch -D <branch>`,
+     `git worktree prune`.
+   - **Under `~/.codex/worktrees/`** (the Codex app's): the app owns that
+     folder, so don't delete it with Git. Run `git -C <path> switch --detach`,
+     then `git branch -D <branch>`. Tell Aman to archive that task's chat in
+     Codex, which retires its worktree. A clean, detached leftover there holds
+     nothing, so it isn't a blocker.
+   - **This chat is running inside the worktree** and can't leave it (Codex):
+     do everything except removing the folder, and say so. `--force` deletes uncommitted, unstaged and untracked
    files in that worktree; Aman wants them gone, not preserved. List what was
    discarded (`git -C <worktree> status --short` before removing).
 7. Tick the TODO line, move it to **Done**, and tell Aman what was removed, which
