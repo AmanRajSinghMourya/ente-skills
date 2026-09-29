@@ -43,7 +43,10 @@ fork PR is closed here.
      worktree archive tool if it lists this worktree. If it doesn't, or the tool
      isn't available, remove it with Git anyway:
      `git worktree remove --force <path>`, then `git branch -D <branch>` and
-     `git worktree prune`. Aman has approved this; don't stop to ask.
+     `git worktree prune`. Aman has approved this; don't stop to ask. In
+     Codex, that folder is outside the chat's sandbox: request escalated
+     permission for the command so Aman only clicks approve. Never hand him
+     the command to run himself.
    - **This chat is running inside the worktree** and can't leave it (Codex):
      do everything except removing the folder, and say so.
 
