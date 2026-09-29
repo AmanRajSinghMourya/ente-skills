@@ -50,11 +50,12 @@ After the go:
      create another worktree.
    - **The chat is in the main checkout:** create
      `.worktrees/<B|F|I>-<surface>-<desc>` from `origin/main` on that branch
-     (the main checkout's `.git/info/exclude` must have `/.worktrees/`). In
-     Claude Code, move in with `EnterWorktree` and the worktree `path`. In
-     Codex, which can't move, keep going: edit the worktree by its full path,
-     and tell Aman once that the diff view won't show it and that starting
-     tasks in Codex's worktree mode avoids this.
+     (the main checkout's `.git/info/exclude` must have `/.worktrees/`), and
+     move in with `EnterWorktree` and the worktree `path` (Claude Code). In
+     Codex, use the app's `create_worktree` tool instead: it attaches a
+     managed worktree to this chat without moving it. Then create the branch
+     there and work in the returned path. Only if that tool is missing, use
+     `git worktree add` and edit it by its full path.
 
    Never stop just because the chat can't switch folders. Add the worktree
    path to the TODO line.
