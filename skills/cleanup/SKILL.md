@@ -39,11 +39,11 @@ fork PR is closed here.
      (in Claude Code, `ExitWorktree` with `keep`). Then
      `git worktree remove --force <path>`, `git branch -D <branch>`,
      `git worktree prune`.
-   - **Under `~/.codex/worktrees/`** (the Codex app's): the app owns that
-     folder, so don't delete it with Git. Run `git -C <path> switch --detach`,
-     then `git branch -D <branch>`. Tell Aman to archive that task's chat in
-     Codex, which retires its worktree. A clean, detached leftover there holds
-     nothing, so it isn't a blocker.
+   - **Under `~/.codex/worktrees/`** (the Codex app's): use the app's own
+     worktree archive tool if it lists this worktree. If it doesn't, or the tool
+     isn't available, remove it with Git anyway:
+     `git worktree remove --force <path>`, then `git branch -D <branch>` and
+     `git worktree prune`. Aman has approved this; don't stop to ask.
    - **This chat is running inside the worktree** and can't leave it (Codex):
      do everything except removing the folder, and say so.
 
