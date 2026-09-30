@@ -34,26 +34,25 @@ fork PR is closed here.
 5. **Commits that never reached a PR:** `git -C <worktree> log --oneline
    <headRefOid of the latest PR>..<branch>`. If any print, show them and ask;
    deleting the branch loses them.
-6. **Remove,** from the main checkout. Which worktree it is decides how:
-   - **Under `.worktrees/`** (ours): if this chat is inside it, leave it first
-     (in Claude Code, `ExitWorktree` with `keep`). Then
-     `git worktree remove --force <path>`, `git branch -D <branch>`,
-     `git worktree prune`.
-   - **Under `~/.codex/worktrees/`** (the Codex app's): each one is attached to
-     the Codex chat that created it, and only that chat can archive it.
-     - In that chat: use `archive_worktree`. It keeps a recoverable snapshot,
-       and the chat stays open. Then `git branch -D <branch>`.
-     - From another Codex chat: find the owning chat (`list_threads`,
-       `read_thread`) and send it `/cleanup <task>` with
-       `send_message_to_thread`. Don't try `archive_worktree` here; it fails
-       with "not attached to the current task".
-     - No chat owns it any more, or you're in Claude Code: remove it with Git,
-       `git worktree remove --force <path>`, `git branch -D <branch>`,
-       `git worktree prune`. Aman has approved this. In Codex, request
-       escalated permission for the command so he only clicks approve; never
-       hand him the command to run himself.
-   - **This chat is running inside the worktree** and can't leave it (Codex):
-     do everything except removing the folder, and say so.
+6. **Remove the worktree. Always finish this step; never stop or hand Aman a
+   command.** He knows the consequences and has approved removing it
+   whatever it holds: uncommitted or untracked files, submodules, a lock.
+   - Codex worktree (under `~/.codex/worktrees/`) and this chat owns it: try
+     `archive_worktree` first, since it keeps a snapshot.
+   - Anything else, or archiving fails for any reason ("not attached",
+     not listed, submodules): remove it from the main checkout.
+     If this chat is inside it, leave it first (`ExitWorktree` with `keep` in
+     Claude Code).
+     ```sh
+     git worktree remove -f -f <path>
+     [ -e <path> ] && rm -rf <path>
+     git worktree prune
+     git branch -D <branch>   # if the branch still exists
+     ```
+     `-f -f` also removes worktrees with submodules or a lock. In Codex,
+     request escalated permission so Aman only clicks approve.
+   - The only exception: this chat is running inside that very folder and
+     can't leave it (Codex). Do everything else, then say so.
 
    `--force` deletes uncommitted, unstaged and untracked files in that
    worktree; Aman wants them gone, not preserved. List what was discarded
