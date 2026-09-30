@@ -34,25 +34,29 @@ fork PR is closed here.
 5. **Commits that never reached a PR:** `git -C <worktree> log --oneline
    <headRefOid of the latest PR>..<branch>`. If any print, show them and ask;
    deleting the branch loses them.
-6. **Remove the worktree. Always finish this step; never stop or hand Aman a
-   command.** He knows the consequences and has approved removing it
-   whatever it holds: uncommitted or untracked files, submodules, a lock.
-   - Codex worktree (under `~/.codex/worktrees/`) and this chat owns it: try
-     `archive_worktree` first, since it keeps a snapshot.
-   - Anything else, or archiving fails for any reason ("not attached",
-     not listed, submodules): remove it from the main checkout.
-     If this chat is inside it, leave it first (`ExitWorktree` with `keep` in
-     Claude Code).
+6. **Remove the worktree. Always finish this step; never hand Aman a command.**
+   He has approved removing it whatever it holds: uncommitted or untracked
+   files, submodules, a lock.
+   - **In Codex, for a worktree under `~/.codex/worktrees/`:** Codex's app
+     rules forbid shell deletion there, so use its own mechanisms:
+     - Attached to this chat as a worktree: `archive_worktree`.
+     - It's a chat's own folder (worktree mode; the chat's attachments show
+       only PRs): archive **that chat** with `set_thread_archived`. Codex
+       then deletes the chat's worktree itself, unless the chat is pinned
+       (unpin it first with `set_thread_pinned`) or another active chat
+       still works in that folder. If it's this chat, do every other step
+       first and archive this chat last. Otherwise find it with
+       `list_threads`/`read_thread`, matching its folder to the path.
+   - **In Claude Code, or a worktree under `.worktrees/`:** remove it from
+     the main checkout. If this chat is inside it, leave it first
+     (`ExitWorktree` with `keep`).
      ```sh
      git worktree remove -f -f <path>
      [ -e <path> ] && rm -rf <path>
      git worktree prune
      git branch -D <branch>   # if the branch still exists
      ```
-     `-f -f` also removes worktrees with submodules or a lock. In Codex,
-     request escalated permission so Aman only clicks approve.
-   - The only exception: this chat is running inside that very folder and
-     can't leave it (Codex). Do everything else, then say so.
+     `-f -f` also removes worktrees with submodules or a lock.
 
    `--force` deletes uncommitted, unstaged and untracked files in that
    worktree; Aman wants them gone, not preserved. List what was discarded
