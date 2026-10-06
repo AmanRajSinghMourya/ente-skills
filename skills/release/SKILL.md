@@ -11,8 +11,12 @@ This chat is the release's thread; keep the whole cycle in it.
 **Never run release commands.** `.github/docs/app-release.md` in `ente/ente`
 has the commands for starting, fixing and promoting a release (the
 `app-release.yml` workflow, cherry-picks, build bumps). Read it, fill in the
-app and version, and give Aman the exact commands to run himself. Never run
-them, trigger workflows, move tags or merge anything.
+app and version, and give Aman the exact commands to run himself, with
+`--repo ente/ente` on every `gh` command so they work from any folder. Never
+run them, trigger workflows, move tags or merge anything.
+
+This skill covers the mobile apps Photos, Auth and Locker. For Ensu, Cast or
+Photos desktop, give the commands from `app-release.md` and stop there.
 
 **Test without stopping.** Log in with the stored test account (Codex keeps it
 in memory) and never ask first. On simulators, emulators and test devices,
@@ -27,7 +31,8 @@ Chrome). Show Aman a message before posting it.
 
 ## `/release`: start a release and test the RC
 
-1. **Commands to start.** Ask which app and version, unless Aman said. From
+1. **Commands to start.** Ask which app (Photos, Auth or Locker) and version,
+   unless Aman said. From
    `app-release.md`, give him the `start` command (and remind him to merge the
    PR it opens to move `main` to the next beta).
 2. **Find the RC** once his build finishes: the `<app>-v<version>-rc`
@@ -41,7 +46,7 @@ Chrome). Show Aman a message before posting it.
    (device, OS, app version and build, steps, screenshot or recording). Post
    it now; don't wait for your own testing.
 4. **Context.** In `ente/ente`, read
-   `git log --oneline <previous final tag>..<app>-v<version>-rc -- mobile/apps/<app> mobile/packages`
+   `git log --oneline <previous final tag>..<app>-v<version>-rc -- mobile/apps/<app> mobile/packages rust`
    (previous final tag: `git tag --sort=-creatordate | grep "^<app>-v[0-9.]*$" | head -1`).
    Note risky changes the changelog doesn't mention (shared packages, sync,
    encryption, upload, app lock).
@@ -50,14 +55,22 @@ Chrome). Show Aman a message before posting it.
    biometrics, sharing from other apps). Post it in the chat and start
    testing; Aman can redirect.
 6. **iOS simulator first.** Simulators can't run the TestFlight build, so
-   build the same tag from source in a worktree detached at the RC tag
+   build the same commit from source. The build workflow force-moves the RC
+   tag after each rebuild, so refresh it first:
+   `git fetch --force origin "refs/tags/<app>-v<version>-rc:refs/tags/<app>-v<version>-rc"`,
+   and test that commit. Make a worktree detached at it
    (`R-<app>-<version>`; Codex: `create_worktree`, Claude Code:
-   `git worktree add --detach .worktrees/R-<app>-<version> <app>-v<version>-rc`),
-   then `flutter run -d <simulator>` from `mobile/apps/<app>`. Drive each test
+   `git worktree add --detach .worktrees/R-<app>-<version> <app>-v<version>-rc`).
+   In it, run `flutter pub get --enforce-lockfile` under `mobile/`, then for
+   Photos or Locker `cargo codegen frb <app>` from `rust/`, then
+   `flutter run -d <simulator>` from `mobile/apps/<app>`. If the RC is rebuilt
+   while you test, refresh the tag and start again. Drive each test
    (Claude Code: the iOS simulator tool or Maestro; Codex: computer use),
    with a screenshot per result.
-7. **Then Android.** `adb devices`: use a connected device if there is one,
-   otherwise boot an emulator (`emulator -list-avds`, then
+7. **Then Android.** Prefer an emulator. Use a connected phone (`adb devices`)
+   only if Aman has said it's a test device: installing over an existing app
+   keeps its data, so a phone signed in to his real account would test with
+   it. Otherwise boot an emulator (`emulator -list-avds`, then
    `emulator -avd <name>`). If neither exists, mark Android "not tested" and
    carry on. Install the RC's real APK:
    `gh release download <app>-v<version>-rc --repo ente/nightly --pattern '*.apk' --pattern SHA256SUMS`,
