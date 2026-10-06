@@ -15,6 +15,7 @@ Aman's personal skills for Ente work. Claude Code and Codex both read them
 | `/review-icons` | Review an Auth icon PR with the preview site. Posts only after your OK. |
 | `/cleanup` | After ente/ente merges: close the fork PR, delete the worktree and local branch. `/cleanup merged` does all of them; `/cleanup disk` frees simulator and build space. |
 | `/learn` | Turn something you keep repeating into a check, a skill line or a memory note. |
+| `/release` | Release test cycle: Discord testing thread for an RC, tester feedback checks (`/release check`), changelog and help docs after release (`/release done`). |
 | `/today` | What needs you: open PRs, red CI, comments, tasks in progress, worktrees to clean up. |
 | `/handoff` | A paste-ready message to continue a task in a fresh chat or the other agent. |
 | `/signals` | What users say about Photos and Locker mobile: tickets, GitHub, Discord, crashes. `/today` includes it. |
