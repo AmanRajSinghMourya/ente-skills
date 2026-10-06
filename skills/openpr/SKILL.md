@@ -39,7 +39,9 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    fix the confirmed ones within the task, and rerun the affected checks. Do at
    most one re-review, then list what's still open.
 6. **No approval step.** Aman typing `/openpr` is his OK to commit, push and
-   open the fork PR, so don't wait for another yes. Stop and ask only if:
+   open the PR on his fork, so don't wait for another yes. It never covers
+   `ente/ente`: a PR there happens only through `/openpr upstream`, which
+   asks first, or when Aman tells you to. Stop and ask only if:
    files are staged that aren't part of this task, the review left an open
    finding that needs his call, the fork can't be synced, or the PR would
    need a body (default: none).
