@@ -48,7 +48,7 @@ the fork-then-ente/ente flow).
 - Plan in chat and wait for Aman's go before a worktree or code changes.
 - Bugs: failing test first, then the fix, then the same test passes.
 - Never touch staged or unrelated changes.
-- One approval of the exact commits and PR before anything is committed.
+- Nothing is committed until Aman types `/openpr`; that is the approval, and it reports a summary after opening the PR.
 - Git and PR rules live in `~/.codex/AGENTS.md`.
 - The chat is the record. No task notes files.
 
