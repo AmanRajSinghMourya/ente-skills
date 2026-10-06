@@ -63,12 +63,18 @@ fork PR is closed here.
    (`git -C <worktree> status --short` before removing).
 7. Tick the TODO line, move it to **Done**, and tell Aman what was removed, which
    PR was closed, and which files were discarded.
+8. **Notion, only if the `ente/ente` PR merged.** Find the PR's item in its
+   app's "Roadmap Items" database with Notion search (its URL, then its
+   title). Ask Aman, with the item linked, whether to add the PR link under a
+   `## Pull requests` heading in the page body (not `Notes`, which is the
+   team's) and set `Dev` to `Done` or the value he picks. Write only what he
+   approves. No match or no Notion tools: say so.
 
 ## Everything merged: `/cleanup merged`
 
 List every open fork PR whose `ente/ente` PR is merged, with the local worktree
-and branch for each if they exist on this Mac. Ask once, then run steps 4 to 7
-for each.
+and branch for each if they exist on this Mac, and each one's Notion item from
+step 8. Ask once, then run steps 4 to 8 for each.
 
 ## Disk: `/cleanup disk`
 

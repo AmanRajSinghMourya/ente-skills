@@ -1,12 +1,13 @@
 ---
 name: signals
-description: Summarize what users are saying about the Ente Photos and Locker mobile apps. Covers new support tickets, GitHub issues and discussions, Discord, and crash spikes, grouped into themes with counts and links. Read-only. Use for /signals, "what are users saying", or from /today.
+description: Summarize what users are saying about the Ente Photos and Locker mobile apps. Covers new support tickets, GitHub issues and discussions, Discord, and crash spikes, grouped into themes with counts and links, plus what's assigned to Aman in Notion and which GitHub items Notion is missing. Read-only. Use for /signals, "what are users saying", or from /today.
 ---
 
 # Signals
 
-Read-only. Scope: the Photos and Locker **mobile** apps only. Skip web, desktop,
-Auth, server and self-hosting items unless they clearly hit mobile users.
+Read-only. Scope: the Photos and Locker **mobile** apps only, except Aman's
+Notion assignments. Skip web, desktop, Auth, server and self-hosting items
+unless they clearly hit mobile users.
 Window: the last 24 hours, or what Aman asks for ("this week").
 
 ## Sources
@@ -29,6 +30,9 @@ source is a gap, not a quiet day.
      If every discussion on the page is inside the window and `hasNextPage` is
      true, fetch the next page with `-F after=<endCursor>`. Stop at the first
      discussion updated before the window.
+   - PRs touching Photos or Locker, for the Notion check in step 5 only (they
+     aren't user feedback):
+     `gh pr list --repo ente/ente --state all --limit 200 --search "updated:>=$SINCE" --json number,title,url,state,files --jq '[.[] | select(any(.files[]?; .path | test("^mobile/apps/(photos|locker)/")))]'`.
 2. **Support tickets** through the Zoho Desk tools, if connected in this app:
    tickets created or updated in the window about Photos or Locker on mobile.
    Refer to tickets by ID only.
@@ -37,9 +41,22 @@ source is a gap, not a quiet day.
    `python3 <this skill's folder>/scripts/discord_read.py <channel id> <hours>`.
    It reads the bot token from the macOS Keychain and prints one message per
    line, each with a link you can cite. Exit code 3 means the bot isn't set up
-   on this Mac; skip it and say so.
+   on this Mac; read the Notion "Internal Discord User Feedback" pages for the
+   window instead, and say so.
 4. **Crashes**, if the Sentry tools are connected: new or spiking Photos and
    Locker issues in the window.
+5. **Notion**, if connected. Find each database by name with Notion search.
+   - Assigned to Aman, any app (find his user with `get_users` and `self`):
+     rows of every "<App> Roadmap Items" database whose `Owner` is Aman (a
+     person in some databases, text in others), and "Issue tracker" and
+     "Discussion tracker" rows whose `Assignee` is Aman. The trackers' `Owner`
+     is only suggested routing; list those rows separately as suggested. Skip
+     rows already Done.
+   - GitHub vs Notion: match each Photos or Locker issue and discussion from
+     step 1 to its tracker row by the `GitHub` URL, and each PR to the release
+     or roadmap item whose page mentions its URL. Say "not in Notion" when
+     nothing matches, and flag tracker rows whose GitHub item was updated after
+     their `Source checked`.
 
 ## Summary
 
@@ -52,6 +69,7 @@ experience ("backup stalls on large libraries"), not a source. For each:
 - whether it's a bug, a feature request, confusion (needs docs or clearer UI),
   or praise
 
-Then list items that need a reply or feedback from the team. End with at most
-three suggested `/todo` lines. Never include customer names, emails, ticket
-text or Discord usernames in the summary, and don't write any of it to files.
+Then list items that need a reply or feedback from the team, and the two Notion
+lists from step 5. End with at most three suggested `/todo` lines. Never include
+customer names, emails, ticket text or Discord usernames in the summary, and
+don't write any of it to files.
