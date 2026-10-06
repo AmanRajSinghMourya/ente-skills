@@ -54,19 +54,19 @@ Chrome). Show Aman a message before posting it.
    simulator, Android, or "needs a real device" (camera and scanner,
    biometrics, sharing from other apps). Post it in the chat and start
    testing; Aman can redirect.
-6. **iOS simulator first.** Simulators can't run the TestFlight build, so
-   build the same commit from source. The build workflow force-moves the RC
-   tag after each rebuild, so refresh it first:
-   `git fetch --force origin "refs/tags/<app>-v<version>-rc:refs/tags/<app>-v<version>-rc"`,
-   and test that commit. Make a worktree detached at it
-   (`R-<app>-<version>`; Codex: `create_worktree`, Claude Code:
-   `git worktree add --detach .worktrees/R-<app>-<version> <app>-v<version>-rc`).
+6. **iOS simulator first, from the RC's exact commit.** Simulators can't run
+   the TestFlight build, so build the same commit from source. The build
+   workflow moves the RC tag to each successfully built commit, so read the
+   commit hash once and test only that:
+   `git ls-remote origin refs/tags/<app>-v<version>-rc` (in `ente/ente`).
+   Say the hash in the chat; every result belongs to it. Make a worktree
+   detached at that hash (`R-<app>-<version>`; Codex: `create_worktree`,
+   Claude Code: `git fetch origin <hash> && git worktree add --detach .worktrees/R-<app>-<version> <hash>`).
    In it, run `flutter pub get --enforce-lockfile` under `mobile/`, then for
    Photos or Locker `cargo codegen frb <app>` from `rust/`, then
-   `flutter run -d <simulator>` from `mobile/apps/<app>`. If the RC is rebuilt
-   while you test, refresh the tag and start again. Drive each test
-   (Claude Code: the iOS simulator tool or Maestro; Codex: computer use),
-   with a screenshot per result.
+   `flutter run -d <simulator>` from `mobile/apps/<app>`. Before reporting,
+   check the tag still points at that hash; if it moved, the RC was rebuilt:
+   say so and test the new hash.
 7. **Then Android.** Prefer an emulator. Use a connected phone (`adb devices`)
    only if Aman has said it's a test device: installing over an existing app
    keeps its data, so a phone signed in to his real account would test with
