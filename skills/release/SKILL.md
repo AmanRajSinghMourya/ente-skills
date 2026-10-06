@@ -20,9 +20,10 @@ Chrome). Show Aman every message before posting and post only after his OK.
    version, unless Aman already said. Confirm the tag exists:
    `git ls-remote --tags origin "<app>-v<version>-rc"`. Find the previous
    final release tag (`git tag --sort=-creatordate | grep "^<app>-v[0-9.]*$" | head -1`).
-2. **What changed:** the `changes/` entries added since the previous release,
-   `git diff --name-only --diff-filter=A <previous tag> <rc tag> -- mobile/apps/<app>/changes/`,
-   and read each one at the RC tag. For context, also read
+2. **What changed:** the release notes are the `changes/` entries present at
+   the RC tag (the folder is emptied when the next version starts):
+   `git ls-tree --name-only <rc tag> mobile/apps/<app>/changes/`, then
+   `git show <rc tag>:<file>` for each, skipping `README.md`. For context, also read
    `git log --oneline <previous tag>..<rc tag> -- mobile/apps/<app> mobile/packages`.
    Note risky changes that have no changes entry (shared packages, sync,
    encryption, upload, app lock).
