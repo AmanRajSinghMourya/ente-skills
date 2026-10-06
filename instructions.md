@@ -14,7 +14,7 @@ Write code as if every line costs you money and you're poor.
 
 If I paste a review from Claude, don't treat it as endorsement. Claude is especially prone to Claudeslop. Do not do any changes, just classify the points. And when going through them see if they trigger other avenues you may have missed. In Claude Code, treat a pasted Codex review the same way.
 
-Do not commit without asking. I want to review all diffs.
+Do not commit without asking. I want to review all diffs. Typing `/openpr` is that ask: it commits, pushes and opens the fork PR without another approval.
 
 When a PR is successfully opened or merged in the Codex app, fire one confetti
 burst.
@@ -51,7 +51,7 @@ Ente-only rules:
 - Do not apply PR title prefixes to commits.
 - For Flutter/Dart commands, including `cargo codegen frb`, request escalation since Flutter needs SDK cache access outside the workspace.
 - When creating an Ente branch from the default branch, prefer `aman/<surface>-<short-description>` over `codex/<description>`.
-- Default new Ente PRs to the fork `AmanRajSinghMourya/ente`; use `ente/ente` when Aman selects upstream. Include the exact head/target repository, API account, base, title and body in the final publication approval. Verify the selected push URL instead of assuming `origin` means the selected repository.
+- Default new Ente PRs to the fork `AmanRajSinghMourya/ente`; use `ente/ente` when Aman selects upstream. Report the exact head/target repository, API account, base, title and body in the `/openpr` summary. Verify the selected push URL instead of assuming `origin` means the selected repository.
 - Ensure the repo-local commit identity is `AmanRajSinghMourya <amanrajmourya7@gmail.com>` before committing or pushing.
 - Create PRs only with the authenticated GitHub CLI (`gh pr create`). Never use the GitHub app connector, the `github:yeet` skill, or another connector-based PR creation path.
 - Before updating an existing PR, inspect its actual head repository/branch and push to the matching remote. Do not infer its destination from the current checkout, branch name, commit identity or an old default.

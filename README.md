@@ -9,7 +9,7 @@ Aman's personal skills for Ente work. Claude Code and Codex both read them
 | --- | --- |
 | `/todo` | Add a task to this Mac's `TODO.md`. |
 | `/pickup-task` | Start or resume a task: understand it, plan, wait for your go, build in a worktree. |
-| `/openpr` | Final checks, changes entry, cross-model review, one approval, then commit and open the PR on the fork. `/openpr upstream` opens it on ente/ente after the Codex bot's 👍. |
+| `/openpr` | Final checks, changes entry, cross-model review, then commit and open the PR on the fork (typing it is the approval). `/openpr upstream` opens it on ente/ente after the Codex bot's 👍. |
 | `/pr-feedback` | Work through review comments, bot findings and CI failures on your PR. |
 | `/support` | Draft an answer to a support ticket. Never sends. |
 | `/review-icons` | Review an Auth icon PR with the preview site. Posts only after your OK. |

@@ -1,6 +1,6 @@
 ---
 name: openpr
-description: Commit an Ente task and open its PR on Aman's fork after one approval. Runs the final checks, adds the changes entry, gets a cross-model review, then commits, pushes and runs gh pr create. With "upstream", open the same PR on ente/ente once the fork PR has the Codex bot's thumbs-up. Use only when Aman types /openpr or asks to open the PR.
+description: Commit an Ente task and open its PR on Aman's fork. Typing /openpr is the approval. Runs the final checks, adds the changes entry, gets a cross-model review, then commits, pushes, runs gh pr create and reports a summary. With "upstream", open the same PR on ente/ente once the fork PR has the Codex bot's thumbs-up. Use only when Aman types /openpr or asks to open the PR.
 disable-model-invocation: true
 ---
 
@@ -38,18 +38,11 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    as `--new-files`. Check each finding against the source,
    fix the confirmed ones within the task, and rerun the affected checks. Do at
    most one re-review, then list what's still open.
-6. **Ask once.** One message with:
-   - what changed, in plain words
-   - what the review found and what you did about it
-   - the checks you ran, their results, and what's untested
-   - commit groups with messages, tests beside the code they cover
-   - the PR title (prefix from the touched paths, per AGENTS.md), head
-     repo/branch, base, target repo (the fork `AmanRajSinghMourya/ente` unless
-     Aman picks upstream `ente/ente`),
-     gh account, and body (none unless needed)
-   - the changes-entry wording
-
-   Wait for yes. If the content changes afterwards, ask again.
+6. **No approval step.** Aman typing `/openpr` is his OK to commit, push and
+   open the fork PR, so don't wait for another yes. Stop and ask only if:
+   files are staged that aren't part of this task, the review left an open
+   finding that needs his call, the fork can't be synced, or the PR would
+   need a body (default: none).
 7. **Publish.** First bring the fork's `main` up to date, so the fork PR shows
    only this task's commits: `gh repo sync AmanRajSinghMourya/ente --branch
    main`. It only fast-forwards; never add `--force`. Then check that
@@ -61,8 +54,12 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    each group by explicit path and commit it; never use `git add -A`,
    `git commit -a` or `git stash`. Push to the remote that matches the target, and run
    `gh pr create` (ready, not draft). Confirm head and base with `gh pr view`.
-   Add the PR link to the task's TODO line and give Aman the link.
-8. For a mobile change, ask whether to start the simulator so he can check it
+   Add the PR link to the task's TODO line.
+8. **Summary.** Give Aman the PR link and one short message: what changed,
+   what the review found and what you fixed, the checks you ran and what's
+   untested, the commits, the PR title and target, and the changes-entry
+   wording. He can still ask for changes; push them to the same branch.
+9. For a mobile change, ask whether to start the simulator so he can check it
    himself.
 
 ## `/openpr upstream`
