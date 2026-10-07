@@ -17,6 +17,7 @@ Aman's personal skills for Ente work. Claude Code and Codex both read them
 | `/learn` | Turn something you keep repeating into a check, a skill line or a memory note. |
 | `/release` | Release test cycle: Discord testing thread for an RC, tester feedback checks (`/release check`), changelog and help docs after release (`/release done`). |
 | `/today` | What needs you: open PRs, red CI, comments, tasks in progress, worktrees to clean up. |
+| `/teach` | Ground-up explanation of any part of Ente (for example the server's email flow): plain controlled English, step-by-step diagrams, an interactive HTML page, and a 3Blue1Brown-style video with Manim. |
 | `/handoff` | A paste-ready message to continue a task in a fresh chat or the other agent. |
 | `/signals` | What users say about Photos and Locker mobile: tickets, GitHub, Discord, crashes. `/today` includes it. |
 
