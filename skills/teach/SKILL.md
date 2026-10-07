@@ -23,6 +23,20 @@ read [references/museum.md](references/museum.md) first.
 - One everyday analogy per concept, then return to the code. Put two things
   that are easy to confuse (token and user ID, add and move) side by side in a
   table.
+- **Explain every SQL query the flow runs.** Quote the query, then say in
+  plain sentences:
+  - what it reads or changes, and which tables and columns it uses
+  - what each clause does here (`WHERE`, `JOIN`, `ON CONFLICT`, `FOR UPDATE`,
+    `RETURNING`, `ORDER BY` and `LIMIT`)
+  - what the result looks like, shown as a small example table with real
+    values: the rows before and after for a write, or the rows returned for a
+    read
+  - why it's shaped that way, for example why it's an upsert, why it locks the
+    row, or why it soft-deletes instead of `DELETE`
+  - which transaction it runs in, and what rolls back if a later step fails
+
+  When a local database is available, run a read-only `SELECT` to show real
+  rows.
 - Prove it when it's cheap: one query, one curl or one focused test beats a
   paragraph. Show the real output.
 - No quizzes, no "next steps" or "focus areas", and no restating his question.
