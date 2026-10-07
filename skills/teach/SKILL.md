@@ -20,6 +20,11 @@ read [references/museum.md](references/museum.md) first.
 - **Use Dart comparisons when they shorten things:** a Go struct is a class with
   only fields, `defer` is `finally`, `if err != nil` is try/catch spelled out.
 - **Use real values:** "user 7 asks for a login code" beats "the user".
+- One everyday analogy per concept, then return to the code. Put two things
+  that are easy to confuse (token and user ID, add and move) side by side in a
+  table.
+- Prove it when it's cheap: one query, one curl or one focused test beats a
+  paragraph. Show the real output.
 - No quizzes, no "next steps" or "focus areas", and no restating his question.
 
 ## Writing: about 80% ASD-STE100

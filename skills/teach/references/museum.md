@@ -90,3 +90,14 @@ invariant all of them share:
 
 For narrow questions ("what does this one function do?") one well-chosen example is
 fine — the multi-example rule is for concepts, not lookups.
+
+## Running things locally
+
+The local stack is Postgres.app (or Homebrew postgres) plus `go run cmd/museum/main.go`
+from `server/`, which applies migrations at boot. Helper scripts may exist under
+`server/scripts/` — check before writing your own. `psql -P pager=off -d ente_db -c "..."`
+inspects the database; without `-P pager=off` psql pipes output through `less` and looks
+like it hung.
+
+Before claiming a test or command passes, run it. If the environment is not up and
+bringing it up is slow, say what you did not verify rather than implying you did.
