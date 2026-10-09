@@ -112,7 +112,7 @@ run_codex() {
 run_claude() {
   local out="$out_dir/review-claude.md"
   (cd "$repo" && env -u CLAUDECODE ENTE_CHALLENGE_REVIEWER=1 claude -p --safe-mode \
-    --permission-mode manual --permission-prompts none \
+    --permission-mode dontAsk \
     --tools Read,Glob,Grep,Bash \
     --allowedTools Read Glob Grep "Bash(git log:*)" "Bash(git show:*)" \
       "Bash(git blame:*)" "Bash(git diff:*)" "Bash(git grep:*)" \
