@@ -72,6 +72,21 @@ After the go:
 6. Report in chat: what changed, what the checks and verification showed, what's
    untested. Suggest `/openpr`.
 
+## Decisions
+
+Keep `DECISIONS.md` in the task's worktree root. Add `/DECISIONS.md` to the
+main checkout's `.git/info/exclude` (it covers every worktree), so it's never
+committed. Whenever Aman settles something in the chat ("do X, not Y", a
+trade-off, a product call, something left out), add one line:
+
+```
+- 2026-10-09 · Send the push only after the email succeeds, not before · so users never get a push for a failed email
+```
+
+Note trade-offs and things left out the same way, marked `Trade-off:` or
+`Not in this PR:`. Read it on resume. `/openpr` turns it into the PR
+description, and `/cleanup` deletes it with the worktree.
+
 ## Rules
 
 - Never touch staged or unrelated changes in any checkout. Never commit; that's

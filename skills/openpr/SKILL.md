@@ -43,8 +43,25 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    `ente/ente`: a PR there happens only through `/openpr upstream`, which
    asks first, or when Aman tells you to. Stop and ask only if:
    files are staged that aren't part of this task, the review left an open
-   finding that needs his call, the fork can't be synced, or the PR would
-   need a body (default: none).
+   finding that needs his call, or the fork can't be synced.
+
+   **PR description.** If the worktree's `DECISIONS.md` has entries, write
+   the description from it, without asking, in plain words:
+   ```
+   ## Why
+   One or two sentences on the problem.
+
+   ## Decisions
+   - What was chosen, and why (one line each).
+
+   ## Trade-offs accepted
+   - What we gave up, and why it's acceptable.
+
+   ## Not in this PR
+   - Follow-ups left out on purpose.
+   ```
+   Drop empty sections. Use the same description for `/openpr upstream`.
+   With no decisions, the PR has no description.
 7. **Publish.** First bring the fork's `main` up to date, so the fork PR shows
    only this task's commits: `gh repo sync AmanRajSinghMourya/ente --branch
    main`. It only fast-forwards; never add `--force`. Then check that

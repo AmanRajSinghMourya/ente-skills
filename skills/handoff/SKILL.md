@@ -13,7 +13,7 @@ file:
 
 - the goal, in one or two sentences
 - the worktree, branch, and PR links
-- the decisions Aman made, quoted
+- the decisions Aman made: the worktree's `DECISIONS.md`, plus any not yet in it
 - what's done and how it was verified
 - what's left, and the next step
 - how to check the result
