@@ -14,8 +14,19 @@ under **Up next**, and move it to **In progress**. A task already in
 
 ## 2. Understand and route
 
-Read the linked issue and the relevant code before asking anything. Ask only
-what the code, the issue or the history can't answer.
+Read the linked issue, the matching Notion roadmap item and the relevant Discord
+thread before planning, then check the code. Find the existing item by its issue
+or PR URL, then its title; read its description, owner, Dev/Design status, Figma
+and linked PRs. Search the app's Discord channel and any linked testing thread
+for the task's latest decisions, work in progress and reports. Use the Notion
+connector and available Discord tools or computer use, whichever works. Check
+only this task; report inaccessible sources without treating them as empty.
+
+Notion and Discord carry the team's current work and status; the local TODO is
+only an intake list. Reuse existing items and threads. A lookup does not authorize
+posting: make status, description and PR-link updates when Aman has authorized
+them, and verify they appeared. Keep review, merge and release status separate.
+Ask only what those sources and the code can't answer.
 
 | The task is | Also use |
 | --- | --- |

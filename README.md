@@ -22,7 +22,7 @@ Aman's personal skills for Ente work. Claude Code and Codex both read them
 | `/signals` | What users say about Photos and Locker mobile: tickets, GitHub, Discord, crashes. `/today` includes it. |
 
 The commands call these helpers when a task needs them. You can also call them
-directly: `investigate`, `designer`, `migrate`, `challenge`.
+directly: `investigate`, `designer`, `migrate`, `challenge`, `pr-assets`.
 `copywriter` and `recent-code-bugfix` are kept from the old setup.
 
 ## Built-ins we use instead of writing our own
@@ -51,7 +51,8 @@ the fork-then-ente/ente flow).
 - Never touch staged or unrelated changes.
 - Nothing is committed until Aman types `/openpr`; that is the approval, and it reports a summary after opening the PR.
 - Git and PR rules live in `~/.codex/AGENTS.md`.
-- The chat is the record. No task notes files.
+- The chat and the task's excluded `DECISIONS.md` retain decisions. Notion and
+  Discord carry team work, status and PR links; task pickup checks both.
 
 ## TODO list
 

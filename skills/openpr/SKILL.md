@@ -45,23 +45,17 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    files are staged that aren't part of this task, the review left an open
    finding that needs his call, or the fork can't be synced.
 
-   **PR description.** If the worktree's `DECISIONS.md` has entries, write
-   the description from it, without asking, in plain words:
-   ```
-   ## Why
-   One or two sentences on the problem.
+   **PR description.** Every PR gets a short body: one to three one-line
+   bullets explaining the problem and resulting behavior. Fold relevant choices
+   from `DECISIONS.md`, the chat and the linked Notion item into those bullets;
+   add a brief trade-off or deliberate omission only when a reviewer needs it.
+   No long paragraphs, empty sections or routine check lists. Don't ask merely
+   because the PR has a body. Use the same description for `/openpr upstream`.
 
-   ## Decisions
-   - What was chosen, and why (one line each).
-
-   ## Trade-offs accepted
-   - What we gave up, and why it's acceptable.
-
-   ## Not in this PR
-   - Follow-ups left out on purpose.
-   ```
-   Drop empty sections. Use the same description for `/openpr upstream`.
-   With no decisions, the PR has no description.
+   For a visual change, use `pr-assets` for relevant screenshots: publish them
+   on a separate asset branch in the public fork and add its commit-pinned
+   Before/After table. Save the completed body outside the repo and pass it to
+   `gh pr create --body-file <file>`; PRs are still opened with `gh`.
 7. **Publish.** First bring the fork's `main` up to date, so the fork PR shows
    only this task's commits: `gh repo sync AmanRajSinghMourya/ente --branch
    main`. It only fast-forwards; never add `--force`. Then check that
@@ -73,7 +67,11 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    each group by explicit path and commit it; never use `git add -A`,
    `git commit -a` or `git stash`. Push to the remote that matches the target, and run
    `gh pr create` (ready, not draft). Confirm head and base with `gh pr view`.
-   Add the PR link to the task's TODO line.
+   Add the PR link to the task's existing TODO line if one exists. Check the
+   linked Notion item and Discord thread for current status and existing PR links.
+   When updates are authorized, add the fork/upstream links and short description
+   to those existing records, using the actual review/merge state. A fork PR isn't
+   a merged or released feature. Don't create duplicate items or announcements.
 8. **Summary.** Give Aman the PR link and one short message: what changed,
    what the review found and what you fixed, the checks you ran and what's
    untested, the commits, the PR title and target, and the changes-entry

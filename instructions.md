@@ -41,12 +41,13 @@ Ente-only rules:
 - Put findings, the decision needed and the next step in the chat. The only task notes file is `DECISIONS.md` in the task's worktree: one line for each choice Aman settles (decision, trade-off or thing left out), excluded from Git and deleted with the worktree. The TODO list is `todo/TODO.md` in `ente-skills`, local to each Mac; add to it only when Aman asks (`/todo`).
 - After plan approval, name worktree folders `B-<surface>-<bug>`, `F-<surface>-<feature>` or `I-<surface>-<improvement>` under the Ente checkout's `.worktrees/`, on the matching `aman/<surface>-<description>` branch. If the chat is already in its own Ente worktree (Codex's worktree mode), use that one instead of creating another. Claude moves into a new worktree with `EnterWorktree`; Codex attaches one with its `create_worktree` tool. Never stop because a chat can't switch folders.
 - For design, UI/UX or Figma tasks, use the `designer` skill. Aman's current decisions take precedence over the imported team kit.
+- On task pickup, check the matching Notion item and relevant Discord discussion for the description, owner, current status, decisions and PR links. Use connectors, APIs or computer use as available; reuse existing records when authorized to update them.
 - Implementation tasks go through `pickup-task`, PRs through `openpr`, and finished tasks through `cleanup`. In Codex, create worktrees with `create_worktree`. To retire a Codex worktree, `cleanup` uses `archive_worktree` for an attached one, or archives the chat whose own folder it is (`set_thread_archived`), after which Codex deletes the folder. Claude Code removes worktrees with `git worktree remove -f -f`, then `rm -rf`. Aman has approved removing a worktree whatever it holds, so never stop or hand him the command. Standalone investigation and review stay read-only.
 - If a step needs a tool only the other app has, say so and hand it back. Never claim it ran.
 - To test the mobile apps, log in with the dedicated Ente test account Aman gave you (Codex keeps it in its memory), never his real account, and don't stop to ask. Claude Code doesn't type passwords, so there ask Aman to log in once; the app stays logged in when a new build is installed over it.
 - Before creating a PR, run the lints and tests from the corresponding `.github/workflow` (Some things might need local adaptation, e.g. for server use "./scripts/test-with-postgres.sh host" since instead of docker)
 - Create a ready-to-review PR, not a draft.
-- When creating a PR, use no body if the task has no recorded decisions. If `DECISIONS.md` has entries, `/openpr` writes the body from it without asking (Why, Decisions, Trade-offs accepted, Not in this PR). No mention of irrelevant details like the checks you ran etc.
+- Every PR gets a short description: one to three one-line bullets on the problem and resulting behavior, including relevant decisions or trade-offs. No long paragraphs or routine check lists. `/openpr` writes it without another approval. For visual changes, use `pr-assets` to publish screenshots on a separate asset branch in the public fork and embed commit-pinned Before/After tables; never add them to the product branch.
 - Prefix PR titles when applicable: [rust] / [web] / [server] / [mobile] / [infra] / [meta] / [docs]. Do not use [meta] without my explicit approval. [meta] is only for repository-level changes with no better area (e.g. changing the root README); touching multiple areas is not sufficient, and can still be e.g. [web] if it touches js files cross tree.
 - Do not apply PR title prefixes to commits.
 - For Flutter/Dart commands, including `cargo codegen frb`, request escalation since Flutter needs SDK cache access outside the workspace.
@@ -72,7 +73,7 @@ Ente-only rules:
 
 Aman's Ente skills (`/name` in Claude Code, `$name` in Codex): todo,
 pickup-task, openpr, pr-feedback, cleanup, release, today, signals, support, review-icons,
-learn, handoff, teach, plus the helpers investigate, designer, migrate and challenge.
+learn, handoff, teach, plus the helpers investigate, designer, migrate, challenge and pr-assets.
 For diagrams, use Codex's `visualize` skill.
 
 Aman sometimes forgets these exist. When he asks for something one of them does
