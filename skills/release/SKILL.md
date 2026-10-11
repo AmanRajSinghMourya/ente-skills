@@ -1,6 +1,6 @@
 ---
 name: release
-description: Run an Ente app release cycle. Give Aman the release commands to run, post the Discord testing thread when the release candidate exists, test its changelog on the iOS simulator and then Android, check tester feedback when asked, and after the release check the help changelog and help docs. Use for /release, /release check and /release done.
+description: Run an Ente app release cycle. Test main's changes on the iOS simulator and then Android before the release candidate, give Aman the release commands to run, check the RC and post the Discord testing thread, check tester feedback when asked, and after the release check the help changelog and help docs. Use for /release, /release check and /release done.
 disable-model-invocation: true
 ---
 
@@ -29,58 +29,65 @@ Discord is read and written through the browser where the agent Discord account
 is logged in (Codex: its browser or computer-use plugin; Claude Code: Claude in
 Chrome). Show Aman a message before posting it.
 
-## `/release`: start a release and test the RC
+## `/release`: test, then start the release
 
-1. **Commands to start.** Ask which app (Photos, Auth or Locker) and version,
-   unless Aman said. From
-   `app-release.md`, give him the `start` command (and remind him to merge the
-   PR it opens to move `main` to the next beta).
-2. **Find the RC** once his build finishes: the `<app>-v<version>-rc`
-   pre-release on `ente/nightly` (the Discord release channel also announces
-   "<App> release candidate"):
-   `gh release view <app>-v<version>-rc --repo ente/nightly --json name,body,assets`.
-   Its body is the changelog; its assets hold the Android APK and `SHA256SUMS`.
-3. **Discord testing thread, right away.** In the testing channel, a new thread
-   named `<App> <version> RC (build <n>)`. First message: what's new (from the
-   changelog), risky areas, what testers should focus on, and how to report
-   (device, OS, app version and build, steps, screenshot or recording). Post
-   it now; don't wait for your own testing.
-4. **Context.** In `ente/ente`, read
-   `git log --oneline <previous final tag>..<app>-v<version>-rc -- mobile/apps/<app> mobile/packages rust`
-   (previous final tag: `git tag --sort=-creatordate | grep "^<app>-v[0-9.]*$" | head -1`).
-   Note risky changes the changelog doesn't mention (shared packages, sync,
-   encryption, upload, app lock).
-5. **Test plan.** For each changelog line: how you'll test it and where: iOS
-   simulator, Android, or "needs a real device" (camera and scanner,
-   biometrics, sharing from other apps). Post it in the chat and start
-   testing; Aman can redirect.
-6. **iOS simulator first, from the RC's exact commit.** Simulators can't run
-   the TestFlight build, so build the same commit from source. The build
-   workflow moves the RC tag to each successfully built commit, so read the
-   commit hash once and test only that:
-   `git ls-remote origin refs/tags/<app>-v<version>-rc` (in `ente/ente`).
+Test before the RC exists, so a failure is fixed on `main` instead of
+cherry-picked.
+
+1. **App and version.** Ask which app (Photos, Auth or Locker) and version,
+   unless Aman said.
+2. **Pin the commit.** `git ls-remote origin refs/heads/main` (in `ente/ente`).
    Say the hash in the chat; every result belongs to it. Make a worktree
    detached at that hash (`R-<app>-<version>`; Codex: `create_worktree`,
    Claude Code: `git fetch origin <hash> && git worktree add --detach .worktrees/R-<app>-<version> <hash>`).
-   In it, run `flutter pub get --enforce-lockfile` under `mobile/`, then for
-   Photos or Locker `cargo codegen frb <app>` from `rust/`, then
-   `flutter run -d <simulator>` from `mobile/apps/<app>`. Before reporting,
-   check the tag still points at that hash; if it moved, the RC was rebuilt:
-   say so and test the new hash.
-7. **Then Android.** Prefer an emulator. Use a connected phone (`adb devices`)
-   only if Aman has said it's a test device: installing over an existing app
-   keeps its data, so a phone signed in to his real account would test with
-   it. Otherwise boot an emulator (`emulator -list-avds`, then
-   `emulator -avd <name>`). If neither exists, mark Android "not tested" and
-   carry on. Install the RC's real APK:
-   `gh release download <app>-v<version>-rc --repo ente/nightly --pattern '*.apk' --pattern SHA256SUMS`,
+3. **What's in it.** The release notes are the entries in
+   `mobile/apps/<app>/changes/` at that hash. Also read
+   `git log --oneline <previous final tag>..<hash> -- mobile/apps/<app> mobile/packages rust`
+   (previous final tag: `git tag --sort=-creatordate | grep "^<app>-v[0-9.]*$" | head -1`)
+   and note risky changes no entry mentions (shared packages, sync,
+   encryption, upload, app lock).
+4. **Test plan.** For each entry: how you'll test it and where: iOS
+   simulator, Android emulator, or "needs a real device" (camera and scanner,
+   biometrics, sharing from other apps). Post it in the chat and start
+   testing; Aman can redirect.
+5. **Build and test.** In the worktree, run `flutter pub get --enforce-lockfile`
+   under `mobile/`, then for Photos or Locker `cargo codegen frb <app>` from
+   `rust/`. Then from `mobile/apps/<app>`:
+   - iOS first: `flutter run -d <simulator>`.
+   - Then Android: `flutter run --flavor independent -d <emulator>`. Prefer
+     an emulator (`emulator -list-avds`, then `emulator -avd <name>`). Use a
+     connected phone (`adb devices`) only if Aman has said it's a test device:
+     installing over an existing app keeps its data, so a phone signed in to
+     his real account would test with it. If neither exists, mark Android
+     "not tested" and carry on.
+
+   Screenshot each result.
+6. **Report.** A table: change, iOS result, Android result (pass, fail, or
+   not testable here), with screenshots and what failed. A failure is a normal
+   task (`task`, then `/openpr`); after it merges, test again from step 2.
+7. **Commands to start.** When everything passes, give Aman the `start`
+   command from `app-release.md`, and remind him to merge the PR it opens to
+   move `main` to the next beta.
+8. **Check the RC** once the build finishes: the `<app>-v<version>-rc`
+   pre-release on `ente/nightly` (the Discord release channel also announces
+   "<App> release candidate"). Read its commit with
+   `git ls-remote origin refs/tags/<app>-v<version>-rc`. Apart from the
+   version change, it must hold only the commits you tested; test any others
+   now. Then smoke-test the real APK on the emulator (open, log in, one
+   sync): `gh release download <app>-v<version>-rc --repo ente/nightly --pattern '*.apk' --pattern SHA256SUMS`,
    `shasum -a 256 -c SHA256SUMS --ignore-missing`, then `adb install -r <apk>`.
    If the signature differs from the installed app, uninstall it on an
-   emulator; on a real phone, ask first. Run the same tests, with screenshots.
-8. **Report.** A table: change, iOS result, Android result (pass, fail, or
-   not testable here), with screenshots and what failed. If a fix is needed,
-   give Aman the cherry-pick and build-bump commands from `app-release.md`.
-   Remove the RC worktree with `/cleanup`.
+   emulator; on a real phone, ask first.
+9. **Discord testing thread.** In the testing channel, a new thread named
+   `<App> <version> RC (build <n>)`: what's new (from the RC's changelog,
+   `gh release view <app>-v<version>-rc --repo ente/nightly --json body`), and
+   how to report (device, OS, app version and build, steps, screenshot or
+   recording).
+10. **Notion draft.** The app's "<App> Releases" item for this version: `Stage`
+    to "Release candidate", with the RC link. Write it after Aman's OK.
+11. Remove the RC worktree with `/cleanup`. If a tester finds a fix is needed
+    later, give Aman the cherry-pick and build-bump commands from
+    `app-release.md`.
 
 ## `/release check`: read tester feedback
 
@@ -102,6 +109,9 @@ Chrome). Show Aman a message before posting it.
    give him the `promote` command from `app-release.md`.
 2. After he runs it, confirm the release:
    `gh release view <app>-v<version> --repo ente/ente`.
+   Draft the "<App> Releases" item's `Stage` change to "Current production
+   release" (and the previous one's to historical), with the
+   release link, and write it after Aman's OK.
 3. **Help changelog:** promote opens a PR titled
    `Update <app> help changelog for v<version>`. Find it
    (`gh pr list --repo ente/ente --search "help changelog for v<version>" --state all`),

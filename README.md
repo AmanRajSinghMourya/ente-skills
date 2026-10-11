@@ -8,13 +8,13 @@ Aman's personal skills for Ente work. Claude Code and Codex both read them
 | Command | What it does |
 | --- | --- |
 | `task` | Loads by itself when you give a task: finds its Notion item, plans, waits for your go, builds in a worktree. |
-| `/openpr` | Final checks, changes entry, cross-model review, then commit and open the PR on the fork (typing it is the approval). `/openpr upstream` checks current upstream conflicts and opens a separate PR against ente/ente:main after the Codex bot's 👍. |
-| `/pr-feedback` | Work through review comments, bot findings and CI failures on your PR. |
+| `/openpr` | Format, lint and tests for what changed, changes entry, cross-model review, then commit and open the PR on the fork (typing it is the approval). `/openpr upstream` checks current upstream conflicts and opens a separate PR against ente/ente:main after the Codex bot's 👍, with no extra question. |
+| `/pr-feedback` | Work through review comments, bot findings and CI failures on your PR, with draft replies. Starts by itself after `/openpr`: waits for the Codex bot's review (at most 30 minutes, stops when the PR closes). By-design calls go into the PR description. |
 | `/support` | Draft an answer to a support ticket. Never sends. |
 | `/review-icons` | Review an Auth icon PR with the preview site. Posts only after your OK. |
-| `/cleanup` | After ente/ente merges: close the fork PR, delete the worktree and local branch. `/cleanup merged` does all of them; `/cleanup disk` frees simulator and build space. |
+| `/cleanup` | After ente/ente merges: close the fork PR, delete the worktree, local branch and screenshots, and draft the Notion and Discord updates. `/cleanup merged` does all of them; `/cleanup disk` frees simulator and build space. |
 | `/learn` | Turn something you keep repeating into a check, a skill line or a memory note. |
-| `/release` | Release test cycle: Discord testing thread for an RC, tester feedback checks (`/release check`), changelog and help docs after release (`/release done`). |
+| `/release` | Release test cycle: test main's changes before the RC, then check the RC and post its Discord testing thread, tester feedback checks (`/release check`), changelog and help docs after release (`/release done`). |
 | `/today` | What needs you: open PRs, red CI, comments, tasks in progress, worktrees to clean up. |
 | `/teach` | Ground-up explanation of any part of Ente (for example the server's email flow): plain controlled English, step-by-step diagrams, an interactive HTML page, and a 3Blue1Brown-style video with Manim. |
 | `/handoff` | A paste-ready message to continue a task in a fresh chat or the other agent. |
@@ -67,16 +67,16 @@ the task's changes.
 ./install.sh --switch   # also remove old ente-workflow links and link the global instructions
 ```
 
-It does four things:
+It does three things:
 
 1. Links every skill here into `~/.claude/skills` and `~/.codex/skills`. It
    skips names that already exist. `--switch` first removes links that point
    into the old `ente-workflow/skills` folder. They're links, so no files are
    deleted.
-3. Installs the official plugins into each app: `dart-flutter` (Flutter and Dart
+2. Installs the official plugins into each app: `dart-flutter` (Flutter and Dart
    skills plus the Dart MCP server, from `flutter/skills`) and `figma`. Each app
    keeps its own copy and updates it, so they aren't stored here.
-4. With `--switch`, links `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md` to
+3. With `--switch`, links `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md` to
    `instructions.md`, so both apps and both Macs read the same global rules.
    Existing files are moved aside to `*.before-ente-skills-<time>` first.
    Edit `instructions.md` here and push; the other Mac gets it with `git pull`.

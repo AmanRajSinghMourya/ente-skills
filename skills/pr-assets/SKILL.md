@@ -15,8 +15,10 @@ uploads don't change an existing PR's evidence.
    app state and theme; label platform and step. Use synthetic/test data and
    inspect the selected images before publishing. Don't publish customer files,
    credentials or unrelated screenshots. No UI change means no screenshot work.
-2. Write a manifest outside the repo. Paths are relative to the manifest or
-   absolute; omit `before` or `after` when that view doesn't exist:
+2. Copy the selected screenshots into `~/.cache/ente-pr-assets/<task-slug>/`
+   (the slug is the task branch without `aman/`) and write the manifest there.
+   Paths are relative to the manifest or absolute; omit `before` or `after`
+   when that view doesn't exist:
 
    ```json
    [{"platform":"iOS","step":"After denying access",
@@ -48,5 +50,6 @@ uploads don't change an existing PR's evidence.
    device/build/state context. Missing comparisons stay blank; don't fabricate
    a before image or recapture unchanged screens just for the table.
 5. Pass the finished body file to `gh pr create --body-file <file>`, or
-   `gh pr edit --body-file <file>` when editing was requested. Keep asset
-   branches after cleanup so PR images remain available.
+   `gh pr edit --body-file <file>` when editing was requested. `/cleanup`
+   trashes the local folder, and deletes the asset branch only when no PR
+   merged; a merged PR's images keep pointing at it.

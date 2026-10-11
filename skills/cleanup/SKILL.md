@@ -1,6 +1,6 @@
 ---
 name: cleanup
-description: Dispose of a finished Ente task. Close its leftover fork PR once the ente/ente PR is merged or closed, then delete its worktree (including uncommitted files) and local branch. "merged" does this for every fork PR whose ente/ente PR merged; "disk" frees simulator and build space. Use only when Aman types /cleanup or names a task to clean up.
+description: Dispose of a finished Ente task. Close its leftover fork PR once the ente/ente PR is merged or closed, then delete its worktree (including uncommitted files), local branch and local screenshots, and draft the Notion and Discord updates. "merged" does this for every fork PR whose ente/ente PR merged; "disk" frees simulator and build space. Use only when Aman types /cleanup or names a task to clean up.
 disable-model-invocation: true
 ---
 
@@ -14,7 +14,8 @@ fork PR is closed here.
 
 1. **Name the exact target:** the branch, and its worktree path if it exists on
    this Mac. Only that task. Never the main checkout, another
-   task's worktree or any remote branch. If there's no local worktree or
+   task's worktree or any remote branch except its `pr-assets` branch
+   (step 7). If there's no local worktree or
    branch, only the PR steps apply.
 2. **Find both PRs for the branch.** Both use the same reviewed `aman/…` branch
    on `AmanRajSinghMourya/ente`; their targets are `ente/ente:main` and the fork.
@@ -61,20 +62,29 @@ fork PR is closed here.
    `--force` deletes uncommitted, unstaged and untracked files in that
    worktree; Aman wants them gone, not preserved. List what was discarded
    (`git -C <worktree> status --short` before removing).
-7. Tell Aman what was removed, which
-   PR was closed, and which files were discarded.
-8. **Notion, only if the `ente/ente` PR merged.** Find the PR's item in its
-   app's "Roadmap Items" database with Notion search (its URL, then its
-   title). Ask Aman, with the item linked, whether to add the PR link under a
-   `## Pull requests` heading in the page body (not `Notes`, which is the
-   team's) and set `Dev` to `Done` or the value he picks. Write only what he
-   approves. No match or no Notion tools: say so.
+7. **Screenshots.** `trash ~/.cache/ente-pr-assets/<slug>` (see `pr-assets`;
+   the slug is the branch without `aman/`). If no PR merged, also
+   delete the fork's asset branch: `gh api -X DELETE
+   repos/AmanRajSinghMourya/ente/git/refs/heads/pr-assets/<slug>`. After a
+   merge, keep it: the merged PR's images point at its commit.
+8. **Report and drafts, in one message.** What was removed, which PR was
+   closed, and which files were discarded. Then, if the `ente/ente` PR merged,
+   drafts Aman can paste or tell you to post:
+   - **Notion:** the task's item in its app's "Roadmap Items" (found with
+     Notion search, by the PR URL and then the title), linked. The draft adds
+     the upstream PR link under the page body's `## Pull requests` heading
+     (not `Notes`, which is the team's) and sets `Dev` to `Done`.
+   - **Discord:** a short message for the task's thread or channel: what
+     shipped, in plain words, with the PR link, and which release it lands in
+     (the next one cut from `main`).
+
+   Post nothing until he says so. No Notion item or no Notion tools: say so.
 
 ## Everything merged: `/cleanup merged`
 
 List every open fork PR whose `ente/ente` PR is merged, with the local worktree
-and branch for each if they exist on this Mac, and each one's Notion item from
-step 8. Ask once, then run steps 4 to 8 for each.
+and branch for each if they exist on this Mac. Typing it is the OK: run
+steps 4 to 8 for each, with one combined report and set of drafts.
 
 ## Disk: `/cleanup disk`
 

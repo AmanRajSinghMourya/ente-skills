@@ -1,6 +1,6 @@
 ---
 name: openpr
-description: Commit an Ente task and open its PR on Aman's fork. Typing /openpr is the approval. Runs the final checks, adds the changes entry, gets a cross-model review, then commits, pushes, runs gh pr create and reports a summary. With "upstream", check conflicts against current ente/ente main and open a separate upstream PR once the fork PR has the Codex bot's thumbs-up. Use only when Aman types /openpr or asks to open the PR.
+description: Commit an Ente task and open its PR on Aman's fork. Typing /openpr is the approval. Runs the final checks, adds the changes entry, gets a cross-model review, then commits, pushes, runs gh pr create, reports a summary, drafts the Notion update and waits for the Codex bot's review. With "upstream", check conflicts against current ente/ente main and open a separate upstream PR once the fork PR has the Codex bot's thumbs-up; typing it is the approval. Use only when Aman types /openpr or asks to open the PR.
 disable-model-invocation: true
 ---
 
@@ -33,17 +33,24 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    (simpler code, reuse, no waste; it edits files). For changes to encryption,
    auth, sharing or the server, also run `/security-review`. Codex has no
    equivalent, so skip this step there.
-4. **Checks.** Run the lints and tests from the matching `.github/workflows/*`
-   job on the final content. For the server, use
-   `./scripts/test-with-postgres.sh host`.
+4. **Checks: format, lint and tests, only for what the diff touches.** Take
+   the commands from the matching `.github/workflows/*` job, but run them on
+   the changed packages, not the whole tree. CI runs the full suite on the PR.
+   - Mobile: `dart format` on the changed Dart files, `flutter analyze` in each
+     changed app or package, and `flutter test` for the tests that cover the
+     change. Run `cargo clippy` only when `rust/` changed.
+   - Web: `node scripts/lint.mjs` and the changed package's tests.
+   - Server: `gofmt -l` and `go vet` on the changed packages, then
+     `./scripts/test-with-postgres.sh host -run '<the change's tests>'`.
+   - Skip builds, `staticcheck`, `govulncheck` and `npm audit`; CI runs them.
 5. **Review.** Run the `challenge` skill, passing the task's new files from step 1
    as `--new-files`. Check each finding against the source,
    fix the confirmed ones within the task, and rerun the affected checks. Do at
    most one re-review, then list what's still open.
 6. **No approval step.** Aman typing `/openpr` is his OK to commit, push and
    open the PR on his fork, so don't wait for another yes. It never covers
-   `ente/ente`: a PR there happens only through `/openpr upstream`, which
-   asks first, or when Aman tells you to. Stop and ask only if:
+   `ente/ente`: a PR there happens only through `/openpr upstream` or when
+   Aman tells you to. Stop and ask only if:
    files are staged that aren't part of this task, the review left an open
    finding that needs his call, or the fork can't be synced.
 
@@ -69,16 +76,17 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    each group by explicit path and commit it; never use `git add -A`,
    `git commit -a` or `git stash`. Push to the remote that matches the target, and run
    `gh pr create` (ready, not draft). Confirm head and base with `gh pr view`.
-   Check the linked Notion item and Discord thread for current status and existing PR links.
-   When updates are authorized, add the fork/upstream links and short description
-   to those existing records, using the actual review/merge state. A fork PR isn't
-   a merged or released feature. Don't create duplicate items or announcements.
 8. **Summary.** Give Aman the PR link and one short message: what changed,
    what the review found and what you fixed, the checks you ran and what's
    untested, the commits, the PR title and target, and the changes-entry
    wording. He can still ask for changes; push them to the same branch.
-9. For a mobile change, ask whether to start the simulator so he can check it
-   himself.
+9. **Notion draft.** In the same message, show the update for the task's
+   Notion item: the PR link under a `## Pull requests` heading in the page body
+   (not `Notes`, which is the team's), and the `Dev` status (a fork PR is "in
+   review", not done). Write it after Aman's OK. No item or no Notion tools:
+   say so.
+10. **Wait for the Codex bot** on the fork PR, as in the `pr-feedback` skill.
+    Its review goes straight into `pr-feedback`; don't wait for Aman to ask.
 
 ## `/openpr upstream`
 
@@ -113,11 +121,11 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    rerun affected checks and get a fresh fork review for any new head, then
    restart this upstream sequence at step 1. Never rebase or force-push the
    published review branch to pass this gate.
-5. **Ask once per step 6 above, unless Aman already explicitly authorized
-   creating the upstream PR in this task:** target `ente/ente`,
-   base `main`, head repository `AmanRajSinghMourya/ente`, the fork branch,
-   and the same title and body as the fork PR. Selecting upstream changes the
-   PR's target, not the source repository; it needs no push access to `ente/ente`.
+5. **No question.** Aman typing `/openpr upstream` is the OK. The target is
+   `ente/ente`, base `main`, head repository `AmanRajSinghMourya/ente`, the
+   fork branch, and the same title and body as the fork PR. It changes the
+   PR's target, not the source repository; it needs no push access to
+   `ente/ente`.
 6. **Publish a new upstream PR.** The reviewed head is already on the fork.
    Run `gh pr create --repo ente/ente --head AmanRajSinghMourya:<branch>
    --base main --title <title> --body-file <file>` (ready, not draft). Use the
@@ -126,6 +134,6 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    `base.repo.full_name == ente/ente`, `base.ref == main`,
    `head.repo.full_name == AmanRajSinghMourya/ente`, the branch name and the
    reviewed head SHA.
-   Add the upstream link to the existing Notion item and Discord thread when
-   updates are authorized.
    Leave the fork PR open; `/cleanup` closes it once `ente/ente` merges.
+8. **Wait for the Codex bot** on the `ente/ente` PR, as in the `pr-feedback`
+   skill. Human reviews come later; Aman runs `/pr-feedback` for those.
