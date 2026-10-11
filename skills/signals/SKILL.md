@@ -70,6 +70,6 @@ experience ("backup stalls on large libraries"), not a source. For each:
   or praise
 
 Then list items that need a reply or feedback from the team, and the two Notion
-lists from step 5. End with at most three suggested `/todo` lines. Never include
+lists from step 5. End with at most three suggested tasks. Never include
 customer names, emails, ticket text or Discord usernames in the summary, and
 don't write any of it to files.

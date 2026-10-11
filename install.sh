@@ -59,12 +59,6 @@ if [[ $switch -eq 1 ]]; then
   done
 fi
 
-mkdir -p "$root/todo"
-if [[ ! -f "$root/todo/TODO.md" ]]; then
-  printf '## Up next\n\n## In progress\n\n## Later\n\n## Done\n' > "$root/todo/TODO.md"
-  echo "created $root/todo/TODO.md"
-fi
-
 if command -v claude >/dev/null; then
   markets="$(claude plugin marketplace list 2>/dev/null)"
   plugins="$(claude plugin list 2>/dev/null)"

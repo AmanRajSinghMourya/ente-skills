@@ -48,7 +48,7 @@ Look for a reproducible failure in the touched area before editing.
 ### 3) Implement the minimal fix
 
 Steps 1 and 2 are read-only. Before editing, report the bug and the planned fix
-and wait for Aman's go. Then follow the `pickup-task` build step: a task
+and wait for Aman's go. Then follow the `task` skill's build step: a task
 worktree, a focused failing test first, and never touching staged or unrelated
 changes.
 

@@ -7,8 +7,7 @@ Aman's personal skills for Ente work. Claude Code and Codex both read them
 
 | Command | What it does |
 | --- | --- |
-| `/todo` | Add a task to this Mac's `TODO.md`. |
-| `/pickup-task` | Start or resume a task: understand it, plan, wait for your go, build in a worktree. |
+| `task` | Loads by itself when you give a task: finds its Notion item, plans, waits for your go, builds in a worktree. |
 | `/openpr` | Final checks, changes entry, cross-model review, then commit and open the PR on the fork (typing it is the approval). `/openpr upstream` opens it on ente/ente after the Codex bot's 👍. |
 | `/pr-feedback` | Work through review comments, bot findings and CI failures on your PR. |
 | `/support` | Draft an answer to a support ticket. Never sends. |
@@ -54,11 +53,6 @@ the fork-then-ente/ente flow).
 - The chat and the task's excluded `DECISIONS.md` retain decisions. Notion and
   Discord carry team work, status and PR links; task pickup checks both.
 
-## TODO list
-
-`todo/TODO.md` stays on this Mac and is not in Git. In Obsidian, open the
-`todo/` folder as the vault so it shows only the list. Sections: Up next,
-In progress, Later, Done.
 
 ## Worktrees
 
@@ -79,7 +73,6 @@ It does four things:
    skips names that already exist. `--switch` first removes links that point
    into the old `ente-workflow/skills` folder. They're links, so no files are
    deleted.
-2. Creates `todo/TODO.md` if it's missing.
 3. Installs the official plugins into each app: `dart-flutter` (Flutter and Dart
    skills plus the Dart MCP server, from `flutter/skills`) and `figma`. Each app
    keeps its own copy and updates it, so they aren't stored here.

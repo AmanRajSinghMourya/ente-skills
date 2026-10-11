@@ -46,4 +46,4 @@ few runs. Form hypotheses from the trace. Then change one thing at a time,
 measure after each, and keep only what moves the number. Report before and
 after with the unit, device and build mode.
 
-When `pickup-task` called this, go back to its plan step afterwards.
+When the `task` skill called this, go back to its plan step afterwards.

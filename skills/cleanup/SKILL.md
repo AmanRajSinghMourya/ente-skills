@@ -12,8 +12,8 @@ fork PR is closed here.
 
 ## One task: `/cleanup <task, branch or fork PR>`
 
-1. **Name the exact target:** the branch, and its worktree path and TODO line if
-   they exist on this Mac. Only that task. Never the main checkout, another
+1. **Name the exact target:** the branch, and its worktree path if it exists on
+   this Mac. Only that task. Never the main checkout, another
    task's worktree or any remote branch. If there's no local worktree or
    branch, only the PR steps apply.
 2. **Find both PRs for the branch.** The upstream PR pushes the same `aman/…`
@@ -61,7 +61,7 @@ fork PR is closed here.
    `--force` deletes uncommitted, unstaged and untracked files in that
    worktree; Aman wants them gone, not preserved. List what was discarded
    (`git -C <worktree> status --short` before removing).
-7. Tick the TODO line, move it to **Done**, and tell Aman what was removed, which
+7. Tell Aman what was removed, which
    PR was closed, and which files were discarded.
 8. **Notion, only if the `ente/ente` PR merged.** Find the PR's item in its
    app's "Roadmap Items" database with Notion search (its URL, then its

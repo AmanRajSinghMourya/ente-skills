@@ -23,6 +23,13 @@ read [references/museum.md](references/museum.md) first.
 - One everyday analogy per concept, then return to the code. Put two things
   that are easy to confuse (token and user ID, add and move) side by side in a
   table.
+- **Explain every part of the flow, not just one layer.** That includes each
+  Go construct you meet (structs, interfaces, goroutines, channels, `defer`,
+  error wrapping), each HTTP route and middleware, config and environment
+  variables, background jobs and crons, queues, external services (like the
+  email provider, S3 or push notification services), retries and timeouts,
+  and the tests that cover it. For each: what it is, what it does in this
+  flow, and why it's there.
 - **Explain every SQL query the flow runs.** Quote the query, then say in
   plain sentences:
   - what it reads or changes, and which tables and columns it uses

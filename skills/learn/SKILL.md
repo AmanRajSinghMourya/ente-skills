@@ -12,7 +12,7 @@ description: Turn something Aman keeps repeating to agents into a lasting fix, m
    reviewer claims don't count.
 3. **Pick the strongest home**, the first one that fits:
    1. A check that fails loudly: a script here, or a lint the Ente repo already
-      runs. An Ente repo change goes through `/todo`, not here.
+      runs. An Ente repo change is a normal task, not done here.
    2. A line in the skill where it applies. Edit it, don't duplicate it.
    3. A new skill, if it's a whole workflow. Write it with the app's built-in
       `skill-creator` (Claude Code and Codex both ship one). Put it in this

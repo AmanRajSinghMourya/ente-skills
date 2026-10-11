@@ -109,5 +109,5 @@ Chrome). Show Aman a message before posting it.
 4. **Help docs:** for each user-facing change, check `docs/docs/<app>/`
    (features, FAQ, troubleshooting). List the pages that are missing or out of
    date, with the edit you'd make. Make the edits only after Aman approves,
-   as a normal task (`/pickup-task`, then `/openpr`).
+   as a normal task (the `task` skill, then `/openpr`).
 5. Offer a closing message for the Discord thread.

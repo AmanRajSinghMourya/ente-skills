@@ -67,8 +67,7 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    each group by explicit path and commit it; never use `git add -A`,
    `git commit -a` or `git stash`. Push to the remote that matches the target, and run
    `gh pr create` (ready, not draft). Confirm head and base with `gh pr view`.
-   Add the PR link to the task's existing TODO line if one exists. Check the
-   linked Notion item and Discord thread for current status and existing PR links.
+   Check the linked Notion item and Discord thread for current status and existing PR links.
    When updates are authorized, add the fork/upstream links and short description
    to those existing records, using the actual review/merge state. A fork PR isn't
    a merged or released feature. Don't create duplicate items or announcements.
@@ -94,5 +93,5 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    `ente-io/ente`, which redirects to it), the branch, and the same title and body as the fork PR.
 5. After yes, push the branch to that remote. Then run `gh pr create --repo
    ente/ente --head <branch> --base main` with the same title and body (ready,
-   not draft), and confirm with `gh pr view`. Add the upstream link to the TODO
-   line. Leave the fork PR open; `/cleanup` closes it once `ente/ente` merges.
+   not draft), and confirm with `gh pr view`. Add the upstream link to the
+   Notion item when updates are authorized. Leave the fork PR open; `/cleanup` closes it once `ente/ente` merges.

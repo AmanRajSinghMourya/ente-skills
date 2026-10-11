@@ -1,16 +1,19 @@
 ---
-name: pickup-task
-description: Start or resume an Ente task from the local TODO list. Understand it, route it (bug, UI, new behavior, perf, migration, dependency, question), plan in chat, wait for Aman's go, then build it in a task worktree. Use for /pickup-task, "pick up the next task" or "continue <task>".
+name: task
+description: Do an Ente implementation task from start to finish. Find its Notion item and context, plan in chat, wait for Aman's go, then build it in a worktree with tests and recorded decisions. Use whenever Aman gives a task (a Notion roadmap or issue-tracker item, a GitHub issue, a Zoho ticket, or a plain "fix/build X"), or says "continue X".
 ---
 
-# Pick up a task
+# Task
 
-## 1. Choose it
+## 1. Find the task
 
-Read `todo/TODO.md` in this skills repository (this skill's real directory, up
-two levels, then `todo/`). Take the task Aman named, otherwise the first line
-under **Up next**, and move it to **In progress**. A task already in
-**In progress** is a resume: see [Resume](#resume).
+Aman gives a Notion link or title, a GitHub issue, a Zoho ticket, or a plain
+description. Find the matching Notion item: the app's "<App> Roadmap Items"
+database for features, the "Issue tracker" for bugs. Search by the issue or PR
+URL first, then by title. If there's none, work from what Aman gave and say so;
+don't create Notion items. A task that already has a branch or worktree
+(`git worktree list`, `gh pr list --head <branch>`) is a resume: see
+[Resume](#resume).
 
 ## 2. Understand and route
 
@@ -22,8 +25,7 @@ for the task's latest decisions, work in progress and reports. Use the Notion
 connector and available Discord tools or computer use, whichever works. Check
 only this task; report inaccessible sources without treating them as empty.
 
-Notion and Discord carry the team's current work and status; the local TODO is
-only an intake list. Reuse existing items and threads. A lookup does not authorize
+Notion and Discord carry the team's current work and status. Reuse existing items and threads. A lookup does not authorize
 posting: make status, description and PR-link updates when Aman has authorized
 them, and verify they appeared. Keep review, merge and release status separate.
 Ask only what those sources and the code can't answer.
@@ -69,7 +71,7 @@ After the go:
      `git worktree add` and edit it by its full path.
 
    Never stop just because the chat can't switch folders. Add the worktree
-   path to the TODO line.
+   path in the chat.
 2. Bug: write the focused test first and run it. It must fail because of this
    bug; a missing import or a broken fixture is not a reproduction. Fix, then
    rerun the same test. If no reliable automated reproduction exists, say what
@@ -105,8 +107,7 @@ description, and `/cleanup` deletes it with the worktree.
 - If something you find changes what Aman already agreed, bring it back to him
   before building it.
 - If the change heads past about 1,000 changed lines, stop and re-plan with him.
-- Problems you find that aren't this task: list them at the end and offer
-  `/todo`.
+- Problems you find that aren't this task: list them at the end.
 
 Apply these when they fit the task:
 
@@ -146,8 +147,8 @@ with `--ignore-scripts`), and read the lockfile diff for surprise bumps.
 
 ## Resume
 
-Start from Aman's `/handoff` message if he pasted one. Read the task's TODO line
-for its worktree and PR, and work in that worktree (build step 1). Then run
+Start from Aman's `/handoff` message if he pasted one. Find the task's worktree
+and branch (`git worktree list`) and its PR (`gh pr list --head <branch>`), and work in that worktree (build step 1). Then run
 `git -C <worktree> status`, `git -C <worktree> log origin/main..HEAD`, look at
 the diff, and `gh pr view` if a PR exists. Tell Aman where it stands and what's
 next. Don't redo finished work. Ask only for decisions you can't find in the
