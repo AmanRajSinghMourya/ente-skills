@@ -56,7 +56,8 @@ After the go:
 1. **Work where the chat already is, if you can.** The app's diff view follows
    the chat's folder, and a Codex chat can't change its folder once started.
    Branch name: `aman/<surface>-<desc>` (surface: photos, auth, locker, server,
-   web or infra). Run `git fetch origin` first.
+   web or infra). `origin` must be `ente/ente` (`git remote get-url origin`);
+   if it isn't, stop and tell Aman. Run `git fetch origin` first.
    - **The chat is already in its own Ente worktree** (not the main checkout;
      for example Codex's worktree mode under `~/.codex/worktrees/`): if it's
      clean, `git switch -c aman/<surface>-<desc> origin/main` right there. Don't
@@ -75,13 +76,15 @@ After the go:
 2. Bug: write the focused test first and run it. It must fail because of this
    bug; a missing import or a broken fixture is not a reproduction. Fix, then
    rerun the same test. If no reliable automated reproduction exists, say what
-   you'll use instead before fixing.
+   you'll use instead before fixing. Before calling it fixed, also redo the
+   user's own route on a simulator: the screen, steps and account state they
+   reported. A passing test on a different path doesn't count.
 3. Feature: derive tests from the agreed behavior where feasible.
 4. UI or runtime behavior: run the app on a simulator before and after the
    change (Claude Code's `run` skill, or Codex's computer use), unless Aman said
    he'll test it himself.
-5. Once the code shape settles, run the checks the matching
-   `.github/workflows/*` job runs.
+5. Once the code shape settles, run formatting, lint and the tests for what
+   the diff touches, as in `openpr`'s checks step.
 6. Report in chat: what changed, what the checks and verification showed, what's
    untested. Suggest `/openpr`.
 

@@ -12,6 +12,8 @@ the built-ins: `/code-review` in Claude Code, `codex review` or the
 1. Write a short context file for the reviewer: what the change must do (the
    agreed behavior), what you verified and how, and what's untested. Put it
    outside the repo. The script copies it, so the reviewer sees only that copy.
+   The script also sends the worktree's `DECISIONS.md` by itself, so add any
+   settled decision from the chat or the PR description there first.
 2. Run the script, saying who you are. It lives at `scripts/challenge.sh` in
    this skill's real directory. The skill is usually reached through a link, so
    use the base directory shown when the skill loads, or resolve the link.
@@ -22,7 +24,8 @@ the built-ins: `/code-review` in Claude Code, `codex review` or the
    ```
 
    - The reviewer defaults to the other model. Use `both` for risky changes
-     (server, migrations, encryption, sync) or when Aman asks.
+     (server, migrations, encryption, sync) or when Aman asks; the two run at
+     the same time.
    - A review takes several minutes. Run it in the background or with a long
      timeout.
    - The reviewer gets the base, the tracked diff, your context file, and only
@@ -43,7 +46,8 @@ the built-ins: `/code-review` in Claude Code, `codex review` or the
      the CLI needs updating.
 3. Check every finding against the source yourself. Tell Aman the ones that
    matter and what you did with each: fixed, rejected with the reason, or needs
-   his call. Then delete the review folder the script printed; it holds a copy
+   his call. "Challenges to decisions" are never fixed on your own; show them
+   to Aman apart from the defects. Then delete the review folder the script printed; it holds a copy
    of the diff.
 
 A review Aman pastes into chat is only classified, not acted on, unless he asks

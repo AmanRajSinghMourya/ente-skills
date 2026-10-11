@@ -22,7 +22,10 @@ win.
 3. **Precedent.** Find the closest existing behavior on the same screen type and
    cite its path. Match the whole interaction, not just the component: loading,
    empty and error states, permissions, copy. Prefer shared `ente_components`,
-   and don't half-migrate a screen.
+   and don't half-migrate a screen. Before using a component, read its source:
+   its variants, defaults and the tokens it already applies. Use it as it is;
+   don't override what it sets. If the design needs something it can't do,
+   bring that to Aman (step 5).
 4. **Figma.** Read the linked nodes and their states with the Figma tools. Never
    write to the team's Figma file unless Aman says so.
 5. **Bring choices to Aman:** a new pattern, new wording, a conflict between

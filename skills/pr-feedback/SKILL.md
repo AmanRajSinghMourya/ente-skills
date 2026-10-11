@@ -11,22 +11,24 @@ than the GitHub plugin or connector.
 
 ## Wait for the Codex bot
 
-Run `scripts/wait_review.sh <owner/repo> <number>` from this skill's real
-directory. It checks once a minute and exits with one word as soon as the bot
-answers the latest commit or `@codex review` request:
+Only fork PRs have the Codex bot; `ente/ente` has none. Run
+`scripts/wait_review.sh AmanRajSinghMourya/ente <number>` from this skill's
+real directory. It checks once a minute and exits with one word as soon as the
+bot's summary comment says it finished reviewing the PR's head commit, after
+the latest `@codex review` request:
 
 - `feedback`: the bot left a review. Do steps 1–4 below and show Aman the
   verdicts and draft replies.
-- `approved`: the bot's 👍. On the fork, say the PR is ready for
-  `/openpr upstream`. On `ente/ente`, say the bot is done.
+- `approved`: no findings on the head commit. Say the PR is ready for
+  `/openpr upstream`.
 - `closed`: the PR was merged or closed. Stop.
 - `timeout`: no answer in 30 minutes. Say so and stop; `/pr-feedback` checks
   again later.
 
 It never outlives that: one wait per push, and nothing keeps running after it
 exits. Claude Code: run it with `run_in_background`, which wakes this chat when
-it exits. Codex: run it in the foreground with a 31-minute timeout. Human
-reviews on `ente/ente` take longer; Aman runs `/pr-feedback` for those.
+it exits. Codex: run it in the foreground with a 31-minute timeout. Reviews
+on `ente/ente` come from people; Aman runs `/pr-feedback` for those.
 
 ## Steps
 
@@ -74,9 +76,8 @@ reviews on `ente/ente` take longer; Aman runs `/pr-feedback` for those.
      so reviewers see it before flagging it again.
 6. **Re-trigger the Codex review after any push or description change on a
    fork PR** (`AmanRajSinghMourya/ente`): `gh pr comment <number> --repo AmanRajSinghMourya/ente --body '@codex review'`.
-   `ente/ente` re-reviews on push by itself, so don't comment there. Then wait
-   for the bot again, as above.
+   Then wait for the bot again, as above.
 7. **Report** what was fixed, replied and resolved, and the commits pushed.
-   Once the fork PR has the Codex bot's 👍 newer than the last commit, say it's
-   ready for `/openpr upstream`. If the same confirmed problem keeps coming
+   Once `wait_review.sh` prints `approved`, say it's ready for
+   `/openpr upstream`. If the same confirmed problem keeps coming
    back across PRs, suggest `/learn`.

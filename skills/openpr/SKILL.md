@@ -92,11 +92,10 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
 
 1. **Find the fork PR** for this branch: `gh pr list --repo
    AmanRajSinghMourya/ente --head <branch> --json number,url,title,body,headRefOid`.
-2. **Check the 👍.** It's a `+1` reaction from `chatgpt-codex-connector[bot]`:
-   `gh api repos/AmanRajSinghMourya/ente/issues/<n>/reactions`. It must be newer
-   than the PR's last commit (`gh pr view <n> --repo AmanRajSinghMourya/ente
-   --json commits --jq '.commits[-1].committedDate'`). If it's missing or older,
-   stop and tell Aman. Open review comments go through `/pr-feedback` first.
+2. **Check the bot approved the head commit:** `wait_review.sh
+   AmanRajSinghMourya/ente <n> 1` from the `pr-feedback` skill must print
+   `approved`. Otherwise stop and tell Aman what it printed. Open review
+   comments go through `/pr-feedback` first.
 3. The local branch head must equal the fork PR's `headRefOid`. Otherwise stop.
 4. **Check current upstream.** Fetch `main` from the verified `ente/ente` remote,
    or from `https://github.com/ente/ente.git` if no such remote exists. Use the
@@ -135,5 +134,3 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    `head.repo.full_name == AmanRajSinghMourya/ente`, the branch name and the
    reviewed head SHA.
    Leave the fork PR open; `/cleanup` closes it once `ente/ente` merges.
-8. **Wait for the Codex bot** on the `ente/ente` PR, as in the `pr-feedback`
-   skill. Human reviews come later; Aman runs `/pr-feedback` for those.

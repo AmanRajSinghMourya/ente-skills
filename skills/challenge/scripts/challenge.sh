@@ -51,6 +51,11 @@ if [[ -n "$context" ]]; then
   cp "$context" "$out_dir/context.md"
   context="$out_dir/context.md"
 fi
+decisions=""
+if [[ -f "$repo/DECISIONS.md" ]]; then
+  cp "$repo/DECISIONS.md" "$out_dir/decisions.md"
+  decisions="$out_dir/decisions.md"
+fi
 
 patch="$out_dir/change.patch"
 if ! git -C "$repo" diff "$base_sha" > "$patch"; then
@@ -85,6 +90,10 @@ prompt="$out_dir/prompt.md"
   echo "The change, the tracked diff plus the new files the author confirmed as part of it, is in $patch."
   if [[ -n "$context" ]]; then
     echo "The author's notes on intended behavior and verification are in $context."
+  fi
+  if [[ -n "$decisions" ]]; then
+    echo "Decisions Aman already made for this change are in $decisions. Don't report them as defects."
+    echo "If you think one is wrong, list it separately under \"Challenges to decisions\", with the reason."
   fi
   cat <<'EOF'
 
@@ -121,19 +130,21 @@ run_claude() {
   report claude "$?" "$out"
 }
 
-failed=0
 report() {
   if [[ "$2" -eq 0 && -s "$3" ]]; then
     echo "complete ($1): $3"
   else
     echo "INCOMPLETE ($1, exit $2): $3. Logs in $out_dir"
-    failed=1
+    return 1
   fi
 }
 
 case "$reviewer" in
   codex) run_codex ;;
   claude) run_claude ;;
-  both) run_codex; run_claude ;;
+  both)
+    run_codex & codex_pid=$!
+    run_claude; claude_status=$?
+    wait "$codex_pid" || exit 1
+    exit "$claude_status" ;;
 esac
-exit "$failed"
