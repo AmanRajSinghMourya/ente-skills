@@ -1,6 +1,6 @@
 ---
 name: investigate
-description: Find out how Ente code works, why it's shaped that way, why something breaks (bug, crash, ANR, OOM, wrong data), or why it's slow, with evidence. Read-only. Use for /investigate, "why does X happen", "how does X work", "root cause this", "why is this slow", or a bug picked up by pickup-task.
+description: Find out how Ente code works, why it's shaped that way, why something breaks (bug, crash, ANR, OOM, wrong data), or why it's slow, with evidence. Read-only. Use for /investigate, "why does X happen", "how does X work", "root cause this", "why is this slow", or a bug the task skill is working on.
 ---
 
 # Investigate
