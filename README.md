@@ -11,8 +11,7 @@ Aman's personal skills for Ente work.
 | `/pr-feedback` | Review comments, bot findings and CI failures, with draft replies. Starts by itself after `/openpr`. |
 | `/cleanup` | Closes fork PRs merged upstream, deletes their worktrees, branches and screenshots, and drafts the Notion update. `/cleanup <task>` does one; `/cleanup disk` frees build space. |
 | `/release` | Tests main before the RC, checks the RC, reads tester feedback (`/release check`), then the changelog and help docs (`/release done`). |
-| `/today` | What needs you: open PRs, red CI, comments, worktrees to clean up. |
-| `/signals` | What users say about Photos and Locker: tickets, GitHub, crashes. |
+| `/today` | What needs you: open PRs, red CI, comments, worktrees to clean up, your Notion tasks, and what users say about Photos and Locker. `/today prs` or `/today users [window]` for one part. |
 | `/support` | Drafts an answer to a support ticket. Never sends. |
 | `/review-icons` | Reviews an Auth icon PR with the preview site. |
 | `/teach` | Ground-up explanation of any part of Ente, with diagrams, an interactive page and a Manim video. |

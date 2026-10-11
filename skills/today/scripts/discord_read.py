@@ -34,7 +34,7 @@ def snowflake_at(epoch_seconds):
 def get(path, token):
     request = urllib.request.Request(
         f"https://discord.com/api/v10{path}",
-        headers={"Authorization": f"Bot {token}", "User-Agent": "ente-skills-signals (1.0)"},
+        headers={"Authorization": f"Bot {token}", "User-Agent": "ente-skills-today (1.0)"},
     )
     while True:
         try:
