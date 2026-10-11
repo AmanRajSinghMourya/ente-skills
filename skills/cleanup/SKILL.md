@@ -1,6 +1,6 @@
 ---
 name: cleanup
-description: Dispose of a finished Ente task. Close its leftover fork PR once the ente/ente PR is merged or closed, then delete its worktree (including uncommitted files), local branch and local screenshots, and draft the Notion and Discord updates. "merged" does this for every fork PR whose ente/ente PR merged; "disk" frees simulator and build space. Use only when Aman types /cleanup or names a task to clean up.
+description: Dispose of finished Ente tasks: every one by default, or the one Aman names. Close each leftover fork PR once the ente/ente PR is merged or closed, then delete its worktree (including uncommitted files), local branch and local screenshots, and draft the Notion and Discord updates. "disk" frees simulator and build space. Use only when Aman types /cleanup or names a task to clean up.
 disable-model-invocation: true
 ---
 
@@ -10,7 +10,19 @@ Aman's flow: PR on the fork `AmanRajSinghMourya/ente` first; after the Codex
 bot's 👍, the same branch on `ente/ente`. When the `ente/ente` PR merges, the
 fork PR is closed here.
 
-## One task: `/cleanup <task, branch or fork PR>`
+## `/cleanup`: every finished task
+
+Typing it is the OK; ask nothing. Take every `aman/…` branch that has a
+worktree in `git worktree list` on this Mac or an open PR on
+`AmanRajSinghMourya/ente`. Run the steps below for each one that step 3
+clears. List the others with the reason, such as "upstream PR still open",
+"no PR anywhere" or "commits that never reached a PR" (step 5); don't ask
+about them here. End with one combined report and
+set of drafts.
+
+`/cleanup <task, branch or fork PR>` does the same for that one task only.
+
+## Steps for one task
 
 1. **Name the exact target:** the branch, and its worktree path if it exists on
    this Mac. Only that task. Never the main checkout, another
@@ -79,12 +91,6 @@ fork PR is closed here.
      (the next one cut from `main`).
 
    Post nothing until he says so. No Notion item or no Notion tools: say so.
-
-## Everything merged: `/cleanup merged`
-
-List every open fork PR whose `ente/ente` PR is merged, with the local worktree
-and branch for each if they exist on this Mac. Typing it is the OK: run
-steps 4 to 8 for each, with one combined report and set of drafts.
 
 ## Disk: `/cleanup disk`
 

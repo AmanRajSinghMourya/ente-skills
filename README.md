@@ -12,7 +12,7 @@ Aman's personal skills for Ente work. Claude Code and Codex both read them
 | `/pr-feedback` | Work through review comments, bot findings and CI failures on your PR, with draft replies. Starts by itself after `/openpr`: waits for the Codex bot's review (at most 30 minutes, stops when the PR closes). By-design calls go into the PR description. |
 | `/support` | Draft an answer to a support ticket. Never sends. |
 | `/review-icons` | Review an Auth icon PR with the preview site. Posts only after your OK. |
-| `/cleanup` | After ente/ente merges: close the fork PR, delete the worktree, local branch and screenshots, and draft the Notion and Discord updates. `/cleanup merged` does all of them; `/cleanup disk` frees simulator and build space. |
+| `/cleanup` | After ente/ente merges: close the fork PR, delete the worktree, local branch and screenshots, and draft the Notion and Discord updates. Plain `/cleanup` does every finished task, `/cleanup <task>` just one; `/cleanup disk` frees simulator and build space. |
 | `/learn` | Turn something you keep repeating into a check, a skill line or a memory note. |
 | `/release` | Release test cycle: test main's changes before the RC, then check the RC and post its Discord testing thread, tester feedback checks (`/release check`), changelog and help docs after release (`/release done`). |
 | `/today` | What needs you: open PRs, red CI, comments, tasks in progress, worktrees to clean up. |
