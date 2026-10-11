@@ -53,6 +53,7 @@ Ente-only rules:
 - For Flutter/Dart commands, including `cargo codegen frb`, request escalation since Flutter needs SDK cache access outside the workspace.
 - When creating an Ente branch from the default branch, prefer `aman/<surface>-<short-description>` over `codex/<description>`.
 - Default new Ente PRs to the fork `AmanRajSinghMourya/ente`; use `ente/ente` when Aman selects upstream. Report the exact head/target repository, API account, base, title and body in the `/openpr` summary. Verify the selected push URL instead of assuming `origin` means the selected repository.
+- For the upstream step, create a separate PR from the reviewed fork branch targeting `ente/ente:main`; never retarget the fork review PR or require pushing the branch into `ente/ente`. Before publishing, check the merge against freshly fetched upstream `main` and check new server migration numbers for collisions. Follow `openpr` for the review and conflict gates.
 - Ensure the repo-local commit identity is `AmanRajSinghMourya <amanrajmourya7@gmail.com>` before committing or pushing.
 - Create PRs only with the authenticated GitHub CLI (`gh pr create`). Never use the GitHub app connector, the `github:yeet` skill, or another connector-based PR creation path.
 - Before updating an existing PR, inspect its actual head repository/branch and push to the matching remote. Do not infer its destination from the current checkout, branch name, commit identity or an old default.

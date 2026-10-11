@@ -1,6 +1,6 @@
 ---
 name: openpr
-description: Commit an Ente task and open its PR on Aman's fork. Typing /openpr is the approval. Runs the final checks, adds the changes entry, gets a cross-model review, then commits, pushes, runs gh pr create and reports a summary. With "upstream", open the same PR on ente/ente once the fork PR has the Codex bot's thumbs-up. Use only when Aman types /openpr or asks to open the PR.
+description: Commit an Ente task and open its PR on Aman's fork. Typing /openpr is the approval. Runs the final checks, adds the changes entry, gets a cross-model review, then commits, pushes, runs gh pr create and reports a summary. With "upstream", check conflicts against current ente/ente main and open a separate upstream PR once the fork PR has the Codex bot's thumbs-up. Use only when Aman types /openpr or asks to open the PR.
 disable-model-invocation: true
 ---
 
@@ -8,8 +8,10 @@ disable-model-invocation: true
 
 Aman's flow has two steps. `/openpr` opens the PR on his fork
 `AmanRajSinghMourya/ente`. Once the Codex review bot gives that PR a 👍,
-`/openpr upstream` opens the same PR on `ente/ente`. After the `ente/ente` PR
-merges, `/cleanup` closes the fork PR.
+`/openpr upstream` opens a separate PR from that reviewed fork branch targeting
+`ente/ente:main`. Keep the fork review PR intact; never
+retarget it as the upstream step. After the upstream PR merges, `/cleanup`
+closes the fork PR.
 
 The Git and PR rules are in `~/.codex/AGENTS.md`, in the sections "Ente Push and
 PR Publishing", "Ente-only rules" and "GitHub PR Conventions". Read them now.
@@ -88,10 +90,42 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    --json commits --jq '.commits[-1].committedDate'`). If it's missing or older,
    stop and tell Aman. Open review comments go through `/pr-feedback` first.
 3. The local branch head must equal the fork PR's `headRefOid`. Otherwise stop.
-4. **Ask once:** target `ente/ente`, base `main`, the push remote for
-   `ente/ente` (check the push URL per AGENTS.md; a remote URL may still say
-   `ente-io/ente`, which redirects to it), the branch, and the same title and body as the fork PR.
-5. After yes, push the branch to that remote. Then run `gh pr create --repo
-   ente/ente --head <branch> --base main` with the same title and body (ready,
-   not draft), and confirm with `gh pr view`. Add the upstream link to the
-   Notion item when updates are authorized. Leave the fork PR open; `/cleanup` closes it once `ente/ente` merges.
+4. **Check current upstream.** Fetch `main` from the verified `ente/ente` remote,
+   or from `https://github.com/ente/ente.git` if no such remote exists. Use the
+   fetched commit SHA, not the fork's `origin/main`.
+   Run `git merge-tree --write-tree <upstream-main-sha> HEAD`. Exit 0 means no
+   Git conflicts, 1 means conflicts, and any other exit means the check failed.
+   This checks the merge without changing the index or worktree. Inspect the
+   PR diff with `git diff <upstream-main-sha>...HEAD` for unrelated changes.
+
+   If this task adds server migrations, compare their numeric versions in
+   `server/migrations/` with current upstream `main` and the migration files
+   added by other open `ente/ente` PRs. List them with `gh pr list --repo
+   ente/ente --state open --limit 100 --json number,files,changedFiles`; inspect
+   only `server/migrations/` paths. If the listing hits the limit or a PR's
+   file count exceeds its returned files, paginate the affected API results
+   before claiming the check is complete. Different filenames with the same
+   version can merge cleanly but collide when migrations run; an up/down pair
+   is one migration. Stop publication on a collision, Git conflict or failed
+   check and report the files or PRs involved.
+   A pending PR's version isn't reserved; recheck before merge if main or the
+   competing PR changes. Resolve conflicts only within the authorized scope,
+   rerun affected checks and get a fresh fork review for any new head, then
+   restart this upstream sequence at step 1. Never rebase or force-push the
+   published review branch to pass this gate.
+5. **Ask once per step 6 above, unless Aman already explicitly authorized
+   creating the upstream PR in this task:** target `ente/ente`,
+   base `main`, head repository `AmanRajSinghMourya/ente`, the fork branch,
+   and the same title and body as the fork PR. Selecting upstream changes the
+   PR's target, not the source repository; it needs no push access to `ente/ente`.
+6. **Publish a new upstream PR.** The reviewed head is already on the fork.
+   Run `gh pr create --repo ente/ente --head AmanRajSinghMourya:<branch>
+   --base main --title <title> --body-file <file>` (ready, not draft). Use the
+   same short description and asset tables as the fork PR.
+7. **Verify the result.** Read `gh api repos/ente/ente/pulls/<number>` and check
+   `base.repo.full_name == ente/ente`, `base.ref == main`,
+   `head.repo.full_name == AmanRajSinghMourya/ente`, the branch name and the
+   reviewed head SHA.
+   Add the upstream link to the existing Notion item and Discord thread when
+   updates are authorized.
+   Leave the fork PR open; `/cleanup` closes it once `ente/ente` merges.

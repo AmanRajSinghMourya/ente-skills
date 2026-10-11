@@ -8,7 +8,7 @@ Aman's personal skills for Ente work. Claude Code and Codex both read them
 | Command | What it does |
 | --- | --- |
 | `task` | Loads by itself when you give a task: finds its Notion item, plans, waits for your go, builds in a worktree. |
-| `/openpr` | Final checks, changes entry, cross-model review, then commit and open the PR on the fork (typing it is the approval). `/openpr upstream` opens it on ente/ente after the Codex bot's 👍. |
+| `/openpr` | Final checks, changes entry, cross-model review, then commit and open the PR on the fork (typing it is the approval). `/openpr upstream` checks current upstream conflicts and opens a separate PR against ente/ente:main after the Codex bot's 👍. |
 | `/pr-feedback` | Work through review comments, bot findings and CI failures on your PR. |
 | `/support` | Draft an answer to a support ticket. Never sends. |
 | `/review-icons` | Review an Auth icon PR with the preview site. Posts only after your OK. |

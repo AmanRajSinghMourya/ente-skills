@@ -16,8 +16,8 @@ fork PR is closed here.
    this Mac. Only that task. Never the main checkout, another
    task's worktree or any remote branch. If there's no local worktree or
    branch, only the PR steps apply.
-2. **Find both PRs for the branch.** The upstream PR pushes the same `aman/…`
-   branch to `ente/ente`, and the fork PR uses it on `AmanRajSinghMourya/ente`.
+2. **Find both PRs for the branch.** Both use the same reviewed `aman/…` branch
+   on `AmanRajSinghMourya/ente`; their targets are `ente/ente:main` and the fork.
    ```sh
    gh pr list --repo ente/ente --head <branch> --state all --json number,state,url,headRefOid
    gh pr list --repo AmanRajSinghMourya/ente --head <branch> --state all --json number,state,url,headRefOid
