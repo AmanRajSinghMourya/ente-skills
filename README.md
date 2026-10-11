@@ -1,103 +1,32 @@
 # ente-skills
 
-Aman's personal skills for Ente work. Claude Code and Codex both read them
-(`/name` in Claude, `$name` in Codex).
+Aman's personal skills for Ente work.
 
 ## Commands
 
 | Command | What it does |
 | --- | --- |
 | `task` | Loads by itself when you give a task: finds its Notion item, plans, waits for your go, builds in a worktree. |
-| `/openpr` | Format, lint and tests for what changed, changes entry, cross-model review, then commit and open the PR on the fork (typing it is the approval). `/openpr upstream` checks current upstream conflicts and opens a separate PR against ente/ente:main after the Codex bot's 👍, with no extra question. |
-| `/pr-feedback` | Work through review comments, bot findings and CI failures on your PR, with draft replies. Starts by itself after `/openpr`: waits for the Codex bot's review (at most 30 minutes, stops when the PR closes). By-design calls go into the PR description. |
-| `/support` | Draft an answer to a support ticket. Never sends. |
-| `/review-icons` | Review an Auth icon PR with the preview site. Posts only after your OK. |
-| `/cleanup` | After ente/ente merges: close the fork PR, delete the worktree, local branch and screenshots, and draft the Notion and Discord updates. Plain `/cleanup` does every finished task, `/cleanup <task>` just one; `/cleanup disk` frees simulator and build space. |
-| `/learn` | Turn something you keep repeating into a check, a skill line or a memory note. |
-| `/release` | Release test cycle: test main's changes before the RC, then check the RC and post its Discord testing thread, tester feedback checks (`/release check`), changelog and help docs after release (`/release done`). |
-| `/today` | What needs you: open PRs, red CI, comments, tasks in progress, worktrees to clean up. |
-| `/teach` | Ground-up explanation of any part of Ente (for example the server's email flow): plain controlled English, step-by-step diagrams, an interactive HTML page, and a 3Blue1Brown-style video with Manim. |
-| `/handoff` | A paste-ready message to continue a task in a fresh chat or the other agent. |
-| `/signals` | What users say about Photos and Locker mobile: tickets, GitHub, Discord, crashes. `/today` includes it. |
+| `/openpr` | Checks what changed, adds the changes entry, runs a cross-model review, then commits and opens the PR on the fork. `/openpr upstream` opens it on ente/ente after the Codex bot's 👍. |
+| `/pr-feedback` | Review comments, bot findings and CI failures, with draft replies. Starts by itself after `/openpr`. |
+| `/cleanup` | Closes fork PRs merged upstream, deletes their worktrees, branches and screenshots, and drafts the Notion update. `/cleanup <task>` does one; `/cleanup disk` frees build space. |
+| `/release` | Tests main before the RC, checks the RC, reads tester feedback (`/release check`), then the changelog and help docs (`/release done`). |
+| `/today` | What needs you: open PRs, red CI, comments, worktrees to clean up. |
+| `/signals` | What users say about Photos and Locker: tickets, GitHub, crashes. |
+| `/support` | Drafts an answer to a support ticket. Never sends. |
+| `/review-icons` | Reviews an Auth icon PR with the preview site. |
+| `/teach` | Ground-up explanation of any part of Ente, with diagrams, an interactive page and a Manim video. |
+| `/learn` | Turns something you keep repeating into a check, a skill line or a memory note. |
+| `/handoff` | A paste-ready message to continue a task in a fresh chat. |
 
-The commands call these helpers when a task needs them. You can also call them
-directly: `investigate`, `designer`, `migrate`, `challenge`, `pr-assets`.
-`copywriter` and `recent-code-bugfix` are kept from the old setup.
+Helpers the commands call, also usable directly: `investigate`, `designer`,
+`migrate`, `challenge`, `pr-assets`, `copywriter`, `recent-code-bugfix`.
 
-## Built-ins we use instead of writing our own
-
-| Job | Claude Code | Codex |
-| --- | --- | --- |
-| Review someone else's PR | `/code-review <PR number>` (`--comment` posts) | `codex review`, `review-agent` skill |
-| Review your own diff, same model | `/code-review` | `codex review --base main` |
-| Simplify your diff | `/simplify` (`/openpr` runs it) | none |
-| Security pass | `/security-review` | none |
-| Diagrams (data flow, before/after) | ask for a Mermaid diagram | `visualize` skill |
-| Run and drive the app | `run` skill, simulator tools | `computer-use`, `browser` plugins |
-| Continue a chat | `/resume`, `/branch` | `codex resume`, `codex fork` |
-| Write a new skill | `skill-creator` | `skill-creator` |
-| Flutter, Dart, Figma | `dart-flutter`, `figma` plugins | `dart-flutter`, `figma` plugins |
-
-Not used: Codex's `yeet` and GitHub-plugin skills (they go through the slower
-connector; every PR step here uses the `gh` CLI, and AGENTS.md forbids `yeet`),
-and Claude's `commit-commands` plugin (`/commit-push-pr` knows nothing about
-the fork-then-ente/ente flow).
-
-## Rules every skill keeps
-
-- Plan in chat and wait for Aman's go before a worktree or code changes.
-- Bugs: failing test first, then the fix, then the same test passes.
-- Never touch staged or unrelated changes.
-- Nothing is committed until Aman types `/openpr`; that is the approval, and it reports a summary after opening the PR.
-- Git and PR rules live in `~/.codex/AGENTS.md`.
-- The chat and the task's excluded `DECISIONS.md` retain decisions. Notion and
-  Discord carry team work, status and PR links; task pickup checks both.
-
-
-## Worktrees
-
-Task worktrees live inside the Ente checkout, under `.worktrees/`. The chat
-moves into the worktree before editing, so the Claude or Codex diff view shows
-the task's changes.
-
-## Install on a Mac
+## Install
 
 ```sh
-./install.sh            # add these skills next to whatever is installed
-./install.sh --switch   # also remove old ente-workflow links and link the global instructions
+./install.sh            # link the skills and install the dart-flutter and figma plugins
+./install.sh --switch   # also link instructions.md as the global rules
 ```
 
-It does three things:
-
-1. Links every skill here into `~/.claude/skills` and `~/.codex/skills`. It
-   skips names that already exist. `--switch` first removes links that point
-   into the old `ente-workflow/skills` folder. They're links, so no files are
-   deleted.
-2. Installs the official plugins into each app: `dart-flutter` (Flutter and Dart
-   skills plus the Dart MCP server, from `flutter/skills`) and `figma`. Each app
-   keeps its own copy and updates it, so they aren't stored here.
-3. With `--switch`, links `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md` to
-   `instructions.md`, so both apps and both Macs read the same global rules.
-   Existing files are moved aside to `*.before-ente-skills-<time>` first.
-   Edit `instructions.md` here and push; the other Mac gets it with `git pull`.
-
-## Test login
-
-Tell Codex the test account's email and password once and ask it to remember
-them. Claude Code doesn't type passwords, so log in yourself once on the
-simulator; the app stays logged in across new builds.
-
-## Discord for `/signals`
-
-Discord has no official MCP. `/signals` reads channels through a real Discord
-bot and the Discord API, which is instant and needs no browser login. Don't
-automate a normal user account: Discord bans "self-bots".
-
-1. At https://discord.com/developers/applications, create an application, open
-   **Bot**, turn on **Message Content Intent**, and copy the token.
-2. Under **OAuth2 → URL Generator**, pick scope `bot` with only **View Channels**
-   and **Read Message History**. A server admin opens the URL to add the bot and
-   limits it to the channels you want read.
-3. On each Mac, store the token in the Keychain (it prompts for it; never put it
-   in Git): `security add-generic-password -s ente-discord-bot -a "$USER" -w`
-4. Add the channel IDs to `skills/signals/channels.txt`.
+Edit `instructions.md` here and push; the other Mac gets it with `git pull`.
