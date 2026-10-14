@@ -1,6 +1,6 @@
 ---
 name: pr-feedback
-description: Go through review comments, bot findings (including the automated Codex review) and CI failures on one of Aman's open Ente PRs. Says whether each comment is valid, drafts a reply, and after Aman's OK fixes, replies, resolves the thread and re-triggers the Codex review on the fork. Starts by itself after /openpr by waiting for the Codex bot's review. Use for /pr-feedback, "check the review", "address the comments" or "why is CI red on my PR".
+description: Go through review comments, bot findings (including the automated Codex review) and CI failures on one of Aman's open Ente PRs. Says whether each comment is valid, drafts a reply, and after Aman's OK fixes, replies and resolves the thread. Starts by itself after /openpr by waiting for the Codex bot's review. Use for /pr-feedback, "check the review", "address the comments" or "why is CI red on my PR".
 ---
 
 # PR feedback
@@ -11,11 +11,12 @@ than the GitHub plugin or connector.
 
 ## Wait for the Codex bot
 
-Only fork PRs have the Codex bot; `ente/ente` has none. Run
+Only fork PRs have the Codex bot; `ente/ente` has none. Codex reviews are
+enabled automatically when a fork PR opens or receives a new commit. Do not
+post `@codex review` to request one. Run
 `scripts/wait_review.sh AmanRajSinghMourya/ente <number>` from this skill's
 real directory. It checks once a minute and exits with one word as soon as the
-bot's summary comment says it finished reviewing the PR's head commit, after
-the latest `@codex review` request:
+bot's summary comment says it finished reviewing the PR's head commit:
 
 - `feedback`: the bot left a review. Do steps 1–4 below and show Aman the
   verdicts and draft replies.
@@ -74,9 +75,8 @@ on `ente/ente` come from people; Aman runs `/pr-feedback` for those.
      to the PR description (`gh pr edit <number> --repo <owner/repo>
      --body-file <file>`), on the fork PR and its `ente/ente` PR if it exists,
      so reviewers see it before flagging it again.
-6. **Re-trigger the Codex review after any push or description change on a
-   fork PR** (`AmanRajSinghMourya/ente`): `gh pr comment <number> --repo AmanRajSinghMourya/ente --body '@codex review'`.
-   Then wait for the bot again, as above.
+6. **After pushing a new commit to a fork PR**, wait for its automatic Codex
+   review as above. A description-only change does not need another review.
 7. **Report** what was fixed, replied and resolved, and the commits pushed.
    Once `wait_review.sh` prints `approved`, say it's ready for
    `/openpr upstream`. If the same confirmed problem keeps coming
