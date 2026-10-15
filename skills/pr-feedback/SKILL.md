@@ -57,6 +57,11 @@ on `ente/ente` come from people; Aman runs `/pr-feedback` for those.
    - A **draft reply** in plain words: for a valid one, "Fixed in `<commit>`:
      …"; for the others, the concrete reason or the decision.
 4. **CI failures:**
+   - If the CLA check is stuck on an `ente/ente` PR, open
+     `https://cla-assistant.io/check/ente-io/ente?pullRequest=<upstream-pr-number>`
+     once, using that PR's number, then refresh checks with
+     `gh pr checks <number> --repo ente/ente`. If it still needs a signature,
+     tell Aman; don't sign for him.
    - In code this PR changed: propose the fix.
    - In code it didn't touch: check whether the base is stale
      (`git merge-base --is-ancestor origin/main HEAD`) and say a rebase is
