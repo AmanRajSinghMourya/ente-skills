@@ -1,6 +1,6 @@
 ---
 name: openpr
-description: Commit an Ente task and open its PR on Aman's fork. Typing /openpr is the approval. Adds the changes entry, gets a cross-model review, then commits, pushes, runs gh pr create, reports a summary, drafts the Notion update and waits for the Codex bot's review. With "upstream", check conflicts against current ente/ente main and open a separate upstream PR once the fork PR has the Codex bot's thumbs-up; typing it is the approval. Use only when Aman types /openpr or asks to open the PR.
+description: Commit an Ente task and open its PR on Aman's fork. Typing /openpr is the approval. Adds the changes entry, gets a cross-model review, checks formatting and lint, then commits, pushes, runs gh pr create, reports a summary, drafts the Notion update and waits for the Codex bot's review. With "upstream", check conflicts against current ente/ente main and open a separate upstream PR once the fork PR has the Codex bot's thumbs-up; typing it is the approval. Use only when Aman types /openpr or asks to open the PR.
 disable-model-invocation: true
 ---
 
@@ -37,12 +37,22 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    as `--new-files`. Check each finding against the source,
    fix the confirmed ones within the task, and verify those fixes. Do at
    most one re-review, then list what's still open.
-5. **No approval step.** Aman typing `/openpr` is his OK to commit, push and
+5. **Format and lint.** Check only changed files or packages with the matching
+   formatter and linter. For Dart, use
+   `dart format --output=none --set-exit-if-changed` on changed files and
+   `flutter analyze --no-pub` in
+   changed packages. For web, use Prettier on changed files and ESLint in
+   changed workspaces. For Go, use `gofmt -l` on changed files and `go vet`
+   on changed packages. For Rust, use package-scoped `cargo fmt --check` and
+   `cargo clippy` with the CI features. Fix new failures and rerun these checks.
+   Do not rerun implementation tests, builds or the full CI workflow here.
+6. **No approval step.** Aman typing `/openpr` is his OK to commit, push and
    open the PR on his fork, so don't wait for another yes. It never covers
    `ente/ente`: a PR there happens only through `/openpr upstream` or when
    Aman tells you to. Stop and ask only if:
    files are staged that aren't part of this task, the review left an open
-   finding that needs his call, or the fork can't be synced.
+   finding that needs his call, format or lint still fails, or the fork can't
+   be synced.
 
    **PR description.** Every PR gets a short body: one to three one-line
    bullets explaining the problem and resulting behavior. Fold relevant choices
@@ -55,7 +65,7 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    on a separate asset branch in the public fork and add its commit-pinned
    Before/After table. Save the completed body outside the repo and pass it to
    `gh pr create --body-file <file>`; PRs are still opened with `gh`.
-6. **Publish.** First bring the fork's `main` up to date, so the fork PR shows
+7. **Publish.** First bring the fork's `main` up to date, so the fork PR shows
    only this task's commits: `gh repo sync AmanRajSinghMourya/ente --branch
    main`. It only fast-forwards; never add `--force`. Then check that
    `gh api repos/AmanRajSinghMourya/ente/branches/main --jq .commit.sha` equals
@@ -66,16 +76,17 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    each group by explicit path and commit it; never use `git add -A`,
    `git commit -a` or `git stash`. Push to the remote that matches the target, and run
    `gh pr create` (ready, not draft). Confirm head and base with `gh pr view`.
-7. **Summary.** Give Aman the PR link and one short message: what changed,
-   what the review found and what you fixed, the task validation and what's
-   untested, the commits, the PR title and target, and the changes-entry
-   wording. He can still ask for changes; push them to the same branch.
-8. **Notion draft.** In the same message, show the update for the task's
+8. **Summary.** Give Aman the PR link and one short message: what changed,
+   what the review found and what you fixed, the format/lint results, task
+   validation and what's untested, the commits, the PR title and target, and
+   the changes-entry wording. He can still ask for changes; push them to the
+   same branch.
+9. **Notion draft.** In the same message, show the update for the task's
    Notion item: the PR link under a `## Pull requests` heading in the page body
    (not `Notes`, which is the team's), and the `Dev` status (a fork PR is "in
    review", not done). Write it after Aman's OK. No item or no Notion tools:
    say so.
-9. **Wait for the Codex bot** on the fork PR, as in the `pr-feedback` skill.
+10. **Wait for the Codex bot** on the fork PR, as in the `pr-feedback` skill.
     Its review goes straight into `pr-feedback`; don't wait for Aman to ask.
 
 ## `/openpr upstream`

@@ -84,8 +84,8 @@ After the go:
    change (Claude Code's `run` skill, or Codex's computer use), unless Aman said
    he'll test it himself.
 5. Once the code shape settles, run focused tests and appropriate formatting
-   and lint for the changed code. Report any gaps; `/openpr` does not repeat
-   these checks.
+   and lint for the changed code. Report any gaps; `/openpr` rechecks only
+   formatting and lint before publication.
 6. Report in chat: what changed, what the checks and verification showed, what's
    untested. Suggest `/openpr`.
 
