@@ -83,8 +83,9 @@ After the go:
 4. UI or runtime behavior: run the app on a simulator before and after the
    change (Claude Code's `run` skill, or Codex's computer use), unless Aman said
    he'll test it himself.
-5. Once the code shape settles, run formatting, lint and the tests for what
-   the diff touches, as in `openpr`'s checks step.
+5. Once the code shape settles, run focused tests and appropriate formatting
+   and lint for the changed code. Report any gaps; `/openpr` does not repeat
+   these checks.
 6. Report in chat: what changed, what the checks and verification showed, what's
    untested. Suggest `/openpr`.
 
