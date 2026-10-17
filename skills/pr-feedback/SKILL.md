@@ -50,12 +50,16 @@ on `ente/ente` come from people; Aman runs `/pr-feedback` for those.
 3. **Judge each unresolved comment** against the code. Bot findings are
    sometimes right and sometimes noise, so verify every one. For each, give
    Aman:
-   - **Valid**, **not valid** or **by design** (a deliberate product or design
+   - **Valid**, **not valid**, **by design** (a deliberate product or design
      call, often one in `DECISIONS.md`), with the reason and the `file:line`
-     evidence.
-   - For valid ones, the fix you'd make.
-   - A **draft reply** in plain words: for a valid one, "Fixed in `<commit>`:
-     …"; for the others, the concrete reason or the decision.
+     evidence, or **unverified** when the evidence neither establishes nor
+     disproves the claim. For unverified claims, perform the cheapest decisive
+     check available within scope. Do not implement a suggestion merely
+     because a reviewer raised it.
+   - For valid ones, identify the violated behavior, reachable trigger and
+     smallest fix. Keep optional improvements separate from defects.
+   - A **draft reply** in plain words: describe the proposed fix, evidence or
+     decision. Say "Fixed in `<commit>`" only after that fix exists.
 4. **CI failures:**
    - If the CLA check is stuck on an `ente/ente` PR, open
      `https://cla-assistant.io/check/ente-io/ente?pullRequest=<upstream-pr-number>`
