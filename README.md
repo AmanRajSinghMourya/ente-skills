@@ -6,7 +6,6 @@ Aman's personal skills for Ente work.
 
 | Command | What it does |
 | --- | --- |
-| `task` | Loads by itself when you give a task: finds its Notion item, plans, waits for your go, builds in a worktree. |
 | `/openpr` | Checks what changed, adds the changes entry, runs a cross-model review, then commits and opens the PR on the fork. `/openpr upstream` opens it on ente/ente after the Codex bot's 👍. |
 | `/pr-feedback` | Review comments, bot findings and CI failures, with draft replies. Starts by itself after `/openpr`. |
 | `/cleanup` | Closes fork PRs merged upstream, deletes their worktrees, branches and screenshots, and drafts the Notion update. `/cleanup <task>` does one; `/cleanup disk` frees build space. |
@@ -19,7 +18,7 @@ Aman's personal skills for Ente work.
 | `/handoff` | A paste-ready message to continue a task in a fresh chat. |
 
 Helpers the commands call, also usable directly: `investigate`, `designer`,
-`migrate`, `challenge`, `pr-assets`, `copywriter`, `recent-code-bugfix`.
+`challenge`, `pr-assets`, `copywriter`, `recent-code-bugfix`.
 
 ## Install
 

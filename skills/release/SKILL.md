@@ -64,7 +64,7 @@ cherry-picked.
    Screenshot each result.
 6. **Report.** A table: change, iOS result, Android result (pass, fail, or
    not testable here), with screenshots and what failed. A failure is a normal
-   task (`task`, then `/openpr`); after it merges, test again from step 2.
+   task, then `/openpr`; after it merges, test again from step 2.
 7. **Commands to start.** When everything passes, give Aman the `start`
    command from `app-release.md`, and remind him to merge the PR it opens to
    move `main` to the next beta.
@@ -119,5 +119,5 @@ cherry-picked.
 4. **Help docs:** for each user-facing change, check `docs/docs/<app>/`
    (features, FAQ, troubleshooting). List the pages that are missing or out of
    date, with the edit you'd make. Make the edits only after Aman approves,
-   as a normal task (the `task` skill, then `/openpr`).
+   as a normal task, then `/openpr`.
 5. Offer a closing message for the Discord thread.

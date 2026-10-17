@@ -25,7 +25,7 @@ For new implementation work, investigate and present the plan/design first. Wait
 
 Do not weasel word. This is engineering. Most things are determisitic. If something would be non-trivial to determine, don't still weasel word, tell me that there a way X to deterministically figure this out, but that might take time etc, would I want to do it or go with a heuristic call.
 
-For a bug fix, write and run the focused regression test first, observe the failure caused by the bug, then fix the code and rerun the same test. For features, derive focused tests from the agreed acceptance criteria before implementation where feasible. Verify the changed code after its shape is finalized.
+For a bug fix, write and run the focused regression test first, observe the failure caused by the bug, then fix the code and rerun the same test. Before calling a bug fixed, also redo the user's own route on a simulator (the screen, steps and account state they reported); a passing test on another path doesn't count. Tests assert the agreed behavior, never what the current code happens to do. For features, derive focused tests from the agreed acceptance criteria before implementation where feasible. Verify the changed code after its shape is finalized.
 
 When adding or updating packages, be VERY careful. Check upstream or in GHA or in registries or in security auditors that there are no advisories (Non exhaustive examples: npm + GitHub Advisory + Socket for JS, crates.io/RustSec for Rust, pkg.go.dev/Go vulnerability DB for Go, pub.dev/advisories for Dart/Flutter). If possible, do a dry run first by disabling any install/build scripts. e.g., for web, use npm install --ignore-scripts, only removing if after script is vetted and necessary (escalate to me in case of any doubt); and prior to doing any of it check the npm page, the github, the github advisory, socket.dev (and other such sites) for sus.
 
@@ -42,7 +42,8 @@ Ente-only rules:
 - After plan approval, name worktree folders `B-<surface>-<bug>`, `F-<surface>-<feature>` or `I-<surface>-<improvement>` under the Ente checkout's `.worktrees/`, on the matching `aman/<surface>-<description>` branch. If the chat is already in its own Ente worktree (Codex's worktree mode), use that one instead of creating another. Claude moves into a new worktree with `EnterWorktree`; Codex attaches one with its `create_worktree` tool. Never stop because a chat can't switch folders.
 - For design, UI/UX or Figma tasks, use the `designer` skill. Aman's current decisions take precedence over the imported team kit.
 - On task pickup, check the matching Notion item and relevant Discord discussion for the description, owner, current status, decisions and PR links. Use connectors, APIs or computer use as available; reuse existing records when authorized to update them.
-- Implementation tasks go through `task`, PRs through `openpr`, and finished tasks through `cleanup`. In Codex, create worktrees with `create_worktree`. To retire a Codex worktree, `cleanup` uses `archive_worktree` for an attached one, or archives the chat whose own folder it is (`set_thread_archived`), after which Codex deletes the folder. Claude Code removes worktrees with `git worktree remove -f -f`, then `rm -rf`. Aman has approved removing a worktree whatever it holds, so never stop or hand him the command. Standalone investigation and review stay read-only.
+- Make the smallest change that reuses what the app already has: no new service, helper, package or mechanism unless asked. "Do what Photos does" means Photos' exact shape. Before building, name the one fact the change is safe because of (for example "old clients ignore this field") and prove it by running real code.
+- PRs go through `openpr`, and finished tasks through `cleanup`. In Codex, create worktrees with `create_worktree`. To retire a Codex worktree, `cleanup` uses `archive_worktree` for an attached one, or archives the chat whose own folder it is (`set_thread_archived`), after which Codex deletes the folder. Claude Code removes worktrees with `git worktree remove -f -f`, then `rm -rf`. Aman has approved removing a worktree whatever it holds, so never stop or hand him the command. Standalone investigation and review stay read-only.
 - If a step needs a tool only the other app has, say so and hand it back. Never claim it ran.
 - To test the mobile apps, log in with the dedicated Ente test account Aman gave you (Codex keeps it in its memory), never his real account, and don't stop to ask. Claude Code doesn't type passwords, so there ask Aman to log in once; the app stays logged in when a new build is installed over it.
 - Validate changed code during implementation and report what ran and what did not. `/openpr` checks formatting and lint for changed code before publication; it does not rerun implementation tests or the full CI workflow. GitHub CI runs on the PR.
@@ -72,8 +73,8 @@ Ente-only rules:
 
 ## Ente skills
 
-Aman's Ente skills (`/name` in Claude Code, `$name` in Codex): task, openpr, pr-feedback, cleanup, release, today, support, review-icons,
-learn, handoff, teach, copywriter, recent-code-bugfix, plus the helpers investigate, designer, migrate, challenge and pr-assets.
+Aman's Ente skills (`/name` in Claude Code, `$name` in Codex): openpr, pr-feedback, cleanup, release, today, support, review-icons,
+learn, handoff, teach, copywriter, recent-code-bugfix, plus the helpers investigate, designer, challenge and pr-assets.
 For diagrams, use Codex's `visualize` skill.
 
 Aman sometimes forgets these exist. When he asks for something one of them does

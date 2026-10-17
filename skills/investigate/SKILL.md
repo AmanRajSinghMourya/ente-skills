@@ -1,6 +1,6 @@
 ---
 name: investigate
-description: Find out how Ente code works, why it's shaped that way, why something breaks (bug, crash, ANR, OOM, wrong data), or why it's slow, with evidence. Read-only. Use for /investigate, "why does X happen", "how does X work", "root cause this", "why is this slow", or a bug the task skill is working on.
+description: Find out how Ente code works, why it's shaped that way, why something breaks (bug, crash, ANR, OOM, wrong data), or why it's slow, with evidence. Read-only. Use for /investigate, "why does X happen", "how does X work", "root cause this", "why is this slow", or a bug being fixed.
 ---
 
 # Investigate
@@ -45,5 +45,3 @@ baseline on a profile or release build, never debug, on the same device, over a
 few runs. Form hypotheses from the trace. Then change one thing at a time,
 measure after each, and keep only what moves the number. Report before and
 after with the unit, device and build mode.
-
-When the `task` skill called this, go back to its plan step afterwards.
