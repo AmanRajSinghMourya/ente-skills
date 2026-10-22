@@ -1,6 +1,12 @@
 ---
 name: cleanup
-description: Dispose of finished Ente tasks: every one by default, or the one Aman names. Close each leftover fork PR once the ente/ente PR is merged or closed, then delete its worktree (including uncommitted files), local branch and local screenshots, and draft the Notion and Discord updates. "disk" frees simulator and build space. Use only when Aman types /cleanup or names a task to clean up.
+description: >-
+  Dispose of finished Ente tasks: every one by default, or the one Aman names.
+  Close each leftover fork PR once the ente/ente PR is merged or closed, then
+  delete its worktree (including uncommitted files), local branch and local
+  screenshots, and draft the Notion and Discord updates. "disk" frees simulator
+  and build space. Also release idle task resources. Use only when Aman types
+  /cleanup or names a task to clean up.
 disable-model-invocation: true
 ---
 
@@ -112,6 +118,40 @@ Report first. Delete only what Aman picks.
 - Xcode: `~/Library/Developer/Xcode/DerivedData` and
   `~/Library/Developer/Xcode/iOS DeviceSupport`.
 - `build/` and `.dart_tool/` inside worktrees whose PR is merged or closed.
+- Rust `target/` directories, Cargo registry and Git crate caches, and rustup
+  temporary downloads. Discover configured or shared target directories too.
+  Preserve Cargo binaries, installed toolchains, source, and lockfiles.
+
+Before deleting repository outputs, verify each path is ignored and contains
+no tracked files or submodule source. Recheck active builds and open handles
+before deleting outputs or shared caches. Skip anything in use or uncertain.
+For Codex storage, distinguish generated worktree outputs from source, chat
+history, app databases, and installed plugins. Do not delete those to free space.
 
 Show sizes with `du -sh`, then delete the chosen items. Never touch the simulator
 Aman is using or anything in the main checkout.
+
+## Release idle resources
+
+After task or disk cleanup, inspect process command lines, parents, working
+directories, open handles, and memory use. Recheck each process immediately
+before stopping it. A large RSS, an old process, or a `.snapshot` name alone
+does not prove that a process is disposable.
+
+- Stop idle Gradle or Kotlin build daemons only after confirming that no build,
+  test, or install uses them. Prefer the matching Gradle stop command.
+- Stop orphaned Dart analysis or frontend servers only when their owning task
+  has ended and no editor, Flutter run, test, or MCP client uses them. Then clear
+  `~/.dartServer/.analysis-driver` if no remaining process uses that cache.
+- For manual cleanup, gracefully stop Android test emulators with
+  `adb -s <emulator-serial> emu kill` after confirming that no active build,
+  test, install, or Flutter session uses them. Preserve AVD definitions and data
+  unless their deletion is separately authorized. Never stop a physical device.
+- Prefer graceful shutdown or `SIGTERM` for an exact verified PID. Do not use
+  blanket `pkill java`, `pkill dart`, or forced termination. Preserve active
+  sessions, MCP servers, Codex, Claude, VMs, and unrelated services.
+
+Report which processes stopped and their observed memory use. Do not equate
+their summed RSS with measured free RAM. Leave macOS memory management alone.
+These manual cleanup rules do not change the nightly automation, which still
+preserves running emulators and active processes.
