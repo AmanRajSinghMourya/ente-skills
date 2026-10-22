@@ -43,11 +43,11 @@ set of drafts.
 4. **Close the fork PR** if it's still open: `gh pr close <n> --repo
    AmanRajSinghMourya/ente --comment "Merged upstream in <upstream PR url>"`,
    or "Closed upstream in …" when the upstream PR was closed without merging.
-   Don't delete its branch.
+   Don't delete its remote branch.
 5. **Commits that never reached a PR:** `git -C <worktree> log --oneline
    <headRefOid of the latest PR>..<branch>`. If any print, show them and ask;
    deleting the branch loses them.
-6. **Remove the worktree. Always finish this step; never hand Aman a command.**
+6. **Remove the worktree and local branch. Always finish this step; never hand Aman a command.**
    He has approved removing it whatever it holds: uncommitted or untracked
    files, submodules, a lock.
    - **In Codex, for a worktree under `~/.codex/worktrees/`:** Codex's app
@@ -57,8 +57,9 @@ set of drafts.
        only PRs): archive **that chat** with `set_thread_archived`. Codex
        then deletes the chat's worktree itself, unless the chat is pinned
        (unpin it first with `set_thread_pinned`) or another active chat
-       still works in that folder. If it's this chat, do every other step
-       first and archive this chat last. Otherwise find it with
+       still works in that folder. If it's this chat, do steps 7 and 8
+       first, then archive this chat and finish local branch deletion below.
+       Otherwise find it with
        `list_threads`/`read_thread`, matching its folder to the path.
    - **In Claude Code, or a worktree under `.worktrees/`:** remove it from
      the main checkout. If this chat is inside it, leave it first
@@ -67,9 +68,18 @@ set of drafts.
      git worktree remove -f -f <path>
      [ -e <path> ] && rm -rf <path>
      git worktree prune
-     git branch -D <branch>   # if the branch still exists
      ```
      `-f -f` also removes worktrees with submodules or a lock.
+
+   **After either removal path, delete the local task branch from the main
+   checkout.** Record the branch before archiving. For Codex, wait for archival
+   to complete. Confirm the worktree folder is gone and its path is absent from
+   `git -C <main-checkout> worktree list --porcelain`. If removal is blocked,
+   report it and leave the branch intact. If the local branch still exists, run
+   `git -C <main-checkout> branch -D <branch>` and verify that
+   `git -C <main-checkout> show-ref --verify refs/heads/<branch>` no longer finds
+   it. Skip branch deletion for a detached HEAD with no local task branch.
+   Keep remote task branches and remote-tracking refs unchanged.
 
    `--force` deletes uncommitted, unstaged and untracked files in that
    worktree; Aman wants them gone, not preserved. List what was discarded
