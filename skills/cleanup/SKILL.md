@@ -56,20 +56,34 @@ set of drafts.
 6. **Remove the worktree and local branch. Always finish this step; never hand Aman a command.**
    He has approved removing it whatever it holds: uncommitted or untracked
    files, submodules, a lock.
-   - **In Codex, for a worktree under `~/.codex/worktrees/`:** Codex's app
-     rules forbid shell deletion there, so use its own mechanisms:
+   - **In Codex, for a worktree under `~/.codex/worktrees/`:** prefer the
+     app's managed removal so it can save recovery metadata:
      - Attached to this chat as a worktree: `archive_worktree`.
      - It's a chat's own folder (worktree mode; the chat's attachments show
-       only PRs): archive **that chat** with `set_thread_archived`. Codex
-       then deletes the chat's worktree itself, unless the chat is pinned
-       (unpin it first with `set_thread_pinned`) or another active chat
-       still works in that folder. If it's this chat, do steps 7 and 8
-       first, then archive this chat and finish local branch deletion below.
-       Otherwise find it with
-       `list_threads`/`read_thread`, matching its folder to the path.
+       only PRs): archive **that chat** with `set_thread_archived`. Find it
+       with `list_threads`/`read_thread`, matching its folder to the path.
+       If it's this chat, do steps 7 and 8 first. Archival success confirms
+       the chat's state, not deletion of its checkout. Re-archiving an already
+       archived chat can be a no-op; don't keep retrying it.
+     - Before removal, check current ownership, recent use by other chats,
+       pinned/permanent status, running processes and initialized submodules.
+       A merged PR does not make a checkout disposable if another task reused
+       it. Preserve ongoing work; don't archive its chat just to delete a
+       finished task's attachment. Managed archival cannot handle initialized
+       submodules or embedded repositories.
+     - If managed removal fails or leaves the checkout behind, identify the
+       reason. Aman authorizes the Git removal below as a fallback for a
+       finished, unused task checkout after steps 3 and 5 pass. This also covers
+       initialized submodules. Don't bypass pinned/permanent protection or
+       another task's ownership without his explicit approval. Do not edit
+       Codex databases, ownership records or recovery metadata. Report that
+       direct removal does not create a Codex recovery snapshot.
    - **In Claude Code, or a worktree under `.worktrees/`:** remove it from
      the main checkout. If this chat is inside it, leave it first
      (`ExitWorktree` with `keep`).
+
+   **Direct Git removal** (including the approved Codex fallback): run from
+   the main checkout against the exact verified task path.
      ```sh
      git worktree remove -f -f <path>
      [ -e <path> ] && rm -rf <path>
