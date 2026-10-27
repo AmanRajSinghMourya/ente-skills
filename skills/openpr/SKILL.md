@@ -13,8 +13,8 @@ Aman's flow has two steps. `/openpr` opens the PR on his fork
 retarget it as the upstream step. After the upstream PR merges, `/cleanup`
 closes the fork PR.
 
-The Git and PR rules are in `~/.codex/AGENTS.md`, in the sections "Ente Push and
-PR Publishing", "Ente-only rules" and "GitHub PR Conventions". Read them now.
+The Git and PR rules are in `~/.codex/AGENTS.md`, in the sections "Git" and
+"PRs". Read them now.
 They win over this file. As Claude, skip the lines that only apply inside the
 Codex app (confetti, network escalation). If that file is missing on this Mac,
 stop and tell Aman.
