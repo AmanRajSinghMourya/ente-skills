@@ -77,6 +77,31 @@ Aman's Ente skills (`/name` in Claude Code, `$name` in Codex): openpr, pr-feedba
 learn, handoff, teach, copywriter, recent-code-bugfix, plus the helpers investigate, designer, challenge and pr-assets.
 For diagrams, use Codex's `visualize` skill.
 
+## Support ticket checks
+
+When Aman asks to check new tickets or "my tickets", run an on-demand scan; do
+not schedule it. Read Ente `#customer-issues` in the Discord desktop app from
+the requested date or the last *completed* scan, with overlap at the boundary.
+Open each match to verify the @AmanRaj tag, ticket number, date and direct link.
+Also check Zoho tickets assigned to Aman; say whether each match is a Discord
+tag, a Zoho assignment, or both. Verify Zoho status and assignment, deduplicate
+by ticket ID, and flag mistaken tags separately. Refresh the search immediately
+before reporting so late arrivals are included. If a source is inaccessible,
+report that gap and do not advance its scan cursor.
+
+Keep the private metadata index at `support-tickets/watchlist.md` and one file
+per Monday-Sunday week at `support-tickets/YYYY-Www.md` in this repo. The weekly
+file records all verified issues for that week and the scan boundary. The
+watchlist maps older tickets to their Codex chat and the last checked inbound
+customer reply. During every scan, check older tracked Zoho tickets for new
+customer replies even if they have no new Discord tag. Report new replies to
+Aman in chat. When a ticket has a related Codex chat, send that chat the new
+reply and ask for a read-only reassessment; create a new Ente project chat when
+investigation is needed and Aman has authorized it. Do not post to Discord or
+Zoho or edit product code as part of a scan. Keep customer text, names, emails,
+logs and credentials out of the tracker and the repo. Record source-specific
+verification times; unknown status or ownership stays unknown.
+
 Aman sometimes forgets these exist. When he asks for something one of them does
 and didn't use it, do the work, then end the reply with one line naming it, for
 example "Tip: /pr-feedback does this." Only when one clearly fits, at most one
