@@ -121,9 +121,6 @@ migration checks). In addition:
 
 ## Skills
 
-When I ask to check new tickets or "my tickets", follow the `support` skill's
-ticket scan.
-
 I sometimes forget my skills exist. When I ask for something one clearly does
 and you didn't use it, do the work, then end with one line naming it, e.g.
 "Tip: /pr-feedback does this." At most one tip per reply, never the same one
