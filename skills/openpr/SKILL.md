@@ -13,18 +13,20 @@ Aman's flow has two steps. `/openpr` opens the PR on his fork
 retarget it as the upstream step. After the upstream PR merges, `/cleanup`
 closes the fork PR.
 
-The Git and PR rules are in `~/.codex/AGENTS.md`, in the sections "Git" and
-"PRs". Read them now.
-They win over this file. As Claude, skip the lines that only apply inside the
-Codex app (confetti, network escalation). If that file is missing on this Mac,
-stop and tell Aman.
+The Git and PR rules are in the global instructions (`~/.claude/CLAUDE.md` for
+Claude Code, `~/.codex/AGENTS.md` for Codex), in the "Ente" section. Read it
+now. It wins over this file. If that file is missing on this Mac, stop and
+tell Aman.
 
 Do all GitHub work with the `gh` CLI. Never use Codex's `yeet` skill or the
-GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
+GitHub plugin/connector. They're slower.
 
 1. **Scope.** In the task worktree, check `git status` and the diff against
    `origin/main`. Only this task's changes go in. Never restage or edit files
    Aman staged.
+   Keep only the tests this change needs: each must catch a concrete wrong
+   behavior. Remove tests that repeat another test or restate the
+   implementation.
 2. **Changes entry.** For a user-facing change in an app with a `changes/`
    folder (for example `mobile/apps/photos/changes/`; read its README), add
    `<slug>.md` with one past-tense bullet like the existing files. Skip it for
@@ -71,7 +73,7 @@ GitHub plugin/connector. They're slower, and AGENTS.md forbids them for PRs.
    `gh api repos/AmanRajSinghMourya/ente/branches/main --jq .commit.sha` equals
    the same for `ente/ente`. If the sync fails because the histories diverged,
    stop and tell Aman. Aman has approved this sync; it needs no extra question.
-   Check the repo-local commit identity per AGENTS.md. If anything
+   Check the repo-local commit identity per the global instructions. If anything
    is already staged that isn't part of the agreed groups, stop and ask. Stage
    each group by explicit path and commit it; never use `git add -A`,
    `git commit -a` or `git stash`. Push to the remote that matches the target, and run
