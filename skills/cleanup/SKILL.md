@@ -3,8 +3,8 @@ name: cleanup
 description: >-
   Dispose of finished Ente tasks: every one by default, or the one Aman names.
   Close each leftover fork PR once the ente/ente PR is merged or closed, then
-  delete its worktree (including uncommitted files), local branch and local
-  screenshots, and draft the Notion and Discord updates. "disk" frees simulator
+  delete its worktree (including uncommitted files), its local and fork branch
+  and local screenshots, and draft the Notion and Discord updates. "disk" frees simulator
   and build space. Also release idle task resources. Use only when Aman types
   /cleanup or names a task to clean up.
 disable-model-invocation: true
@@ -32,8 +32,8 @@ set of drafts.
 
 1. **Name the exact target:** the branch, and its worktree path if it exists on
    this Mac. Only that task. Never the main checkout, another
-   task's worktree or any remote branch except its `pr-assets` branch
-   (step 7). If there's no local worktree or
+   task's worktree or any remote branch except this task's own branch on the
+   fork (step 6) and its `pr-assets` branch (step 7). If there's no local worktree or
    branch, only the PR steps apply.
 2. **Find both PRs for the branch.** Both use the same reviewed `aman/…` branch
    on `AmanRajSinghMourya/ente`; their targets are `ente/ente:main` and the fork.
@@ -49,11 +49,10 @@ set of drafts.
 4. **Close the fork PR** if it's still open: `gh pr close <n> --repo
    AmanRajSinghMourya/ente --comment "Merged upstream in <upstream PR url>"`,
    or "Closed upstream in …" when the upstream PR was closed without merging.
-   Don't delete its remote branch.
 5. **Commits that never reached a PR:** `git -C <worktree> log --oneline
    <headRefOid of the latest PR>..<branch>`. If any print, show them and ask;
    deleting the branch loses them.
-6. **Remove the worktree and local branch. Always finish this step; never hand Aman a command.**
+6. **Remove the worktree, local branch and fork branch. Always finish this step; never hand Aman a command.**
    He has approved removing it whatever it holds: uncommitted or untracked
    files, submodules, a lock.
    - **In Codex, for a worktree under `~/.codex/worktrees/`:** prefer the
@@ -99,7 +98,14 @@ set of drafts.
    `git -C <main-checkout> branch -D <branch>` and verify that
    `git -C <main-checkout> show-ref --verify refs/heads/<branch>` no longer finds
    it. Skip branch deletion for a detached HEAD with no local task branch.
-   Keep remote task branches and remote-tracking refs unchanged.
+
+   **Then delete the task's branch on the fork**, never on `ente/ente`. Read
+   its tip with `gh api repos/AmanRajSinghMourya/ente/git/ref/heads/<branch>
+   -q .object.sha`. If that is the `headRefOid` of a PR from step 2, run
+   `gh api -X DELETE repos/AmanRajSinghMourya/ente/git/refs/heads/<branch>`.
+   If the tip has moved past the PR, show the extra commits and ask. A 404
+   means it's already gone. Then drop the stale remote-tracking ref:
+   `git -C <main-checkout> branch -dr <fork remote>/<branch>`.
 
    `--force` deletes uncommitted, unstaged and untracked files in that
    worktree; Aman wants them gone, not preserved. List what was discarded
