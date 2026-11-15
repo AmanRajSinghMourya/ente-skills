@@ -16,7 +16,7 @@ Ask first:
 - Before any Git change while Aman is managing Git state, including edits to staged files.
 
 Work:
-- At the start of an Ente chat, set the chat title (`set_thread_title` in Codex): prefix the descriptive title with 🖥️ server, 🌐 web, 📱 mobile or 🛠️ tooling. Customer tickets lead with 🎫 instead. Append 🔐 Locker, 🖼️ Photos or 🔑 Auth when one app is clear. Preserve Aman's wording, update the prefix when scope becomes clear, and avoid duplicate icons.
+- At the start of an Ente chat, set the chat title (`set_thread_title` in Codex): lead the descriptive title with icons: 🏛️ server, 🌐 web or 📱 mobile, then 💚 Photos, 💙 Locker or 💜 Auth when one app is clear. Customer tickets use 🙋 in place of the first icon. Tooling chats get no icon. Keep Aman's wording, update the icons when scope becomes clear, and never repeat one.
 - After approval, fetch main. Reuse the chat's own worktree, else make one (`EnterWorktree` in Claude Code, `create_worktree` in Codex) under `.worktrees/` named `B-|F-|I-<surface>-<name>` on `aman/<surface>-<short-description>`. Keep working there even if the chat can't switch folders.
 - Record each choice Aman settles as one line in the worktree's Git-excluded `DECISIONS.md`. No other notes files, and no agent instruction files in the product repo.
 - Done means: format and lint pass, focused checks pass, a bug's original failing check now passes, and you repeated the user's route on the real entrypoint (simulator or device for mobile, unless Aman tests). Test with the Ente test account, never Aman's own. Codex uses the stored one, and asks if it isn't stored. Claude Code asks Aman to log in once, since it doesn't type passwords. Report what is untested.
